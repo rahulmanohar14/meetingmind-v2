@@ -85,6 +85,28 @@ def build_index(
     )
 
 
+def load_index(
+    turns: list[Turn],
+    embed_model_name: str,
+    persist_dir: str | Path,
+) -> Index:
+    """Open an existing Chroma collection and rebuild the in-memory BM25 index."""
+    persist_dir = Path(persist_dir)
+    client = chromadb.PersistentClient(path=str(persist_dir))
+    collection = client.get_collection(_COLLECTION_NAME)
+    embed_model = SentenceTransformer(embed_model_name)
+    ids = [turn_id(t) for t in turns]
+    bm25 = BM25Okapi([_tokenize(t.text) for t in turns])
+    return Index(
+        collection=collection,
+        bm25=bm25,
+        turns=list(turns),
+        turn_ids=ids,
+        embed_model=embed_model,
+        persist_dir=str(persist_dir),
+    )
+
+
 def dense_search(index: Index, query: str, k: int) -> list[tuple[str, float]]:
     if k <= 0 or not index.turn_ids:
         return []

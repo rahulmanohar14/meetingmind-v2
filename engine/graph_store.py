@@ -115,14 +115,17 @@ def load_graph(path: str | Path) -> nx.DiGraph:
 
 
 def find_entities(g: nx.DiGraph, query: str) -> list[str]:
-    """Return entity ids whose normalised name contains the normalised query."""
+    """Return entity ids by normalised substring match (either direction)."""
     q = normalise_name(query)
     if not q:
         return []
     hits: list[str] = []
     for nid, attrs in g.nodes(data=True):
-        name = attrs.get("name", "")
-        if q in normalise_name(str(name)) or q in normalise_name(str(nid)):
+        name = normalise_name(str(attrs.get("name", "")))
+        nid_norm = normalise_name(str(nid))
+        if name and (q in name or (len(name) >= 3 and name in q)):
+            hits.append(nid)
+        elif nid_norm and (q in nid_norm or (len(nid_norm) >= 3 and nid_norm in q)):
             hits.append(nid)
     return hits
 

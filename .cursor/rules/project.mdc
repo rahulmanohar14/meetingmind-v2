@@ -1,0 +1,42 @@
+Project: meetingmind-v2. A meeting-transcript QA system with hybrid vector
+retrieval, a typed knowledge graph, and a LangGraph routing agent.
+
+ENVIRONMENT
+- Python 3.14 in .venv at the repo root. Windows, Git Bash.
+- Groq (openai/gpt-oss-20b by default, override with GROQ_MODEL). Multiple keys
+  via GROQ_API_KEYS. The llama-3.1-8b-instant and llama-3.3-70b-versatile
+  models were removed from the Groq free tier; do not reintroduce them.
+
+HARD RULES
+- NO async, NO threading, NO asyncio.gather, NO concurrent.futures.
+  Every LLM call is sequential. Parallel calls exceed the rate limit instantly.
+- Every LLM call goes through engine.llm.complete. Never instantiate an API
+  client anywhere else. Never bypass the disk cache.
+- Pin exact versions for anything added to requirements-v2.txt.
+- No try/except that swallows an exception silently. Log it or re-raise.
+- Never commit .env or anything containing an API key.
+
+ARCHITECTURE
+- engine/ holds all logic. scripts/ holds runnable entry points. app.py is UI only.
+- LangGraph nodes are thin wrappers around engine functions. Retrieval and graph
+  logic never live inside agent.py.
+- Chroma collections use hnsw:space cosine explicitly. The L2 default degrades
+  normalized embeddings.
+- Every extracted entity and relation carries the turn id it came from.
+  Citations depend on it.
+
+LOCKED DECISIONS, do not propose alternatives
+ChromaDB file-backed, NetworkX saved as JSON, rank-bm25 fused with RRF,
+BAAI/bge-small-en-v1.5 embeddings, local cross-encoder rerank, LangGraph,
+single agent. No Postgres, no pgvector, no Neo4j, no Qdrant, no vector-DB
+migration, no text classifier, no multi-agent supervisor.
+
+SCOPE
+Do not add features that were not asked for. No config abstraction layers,
+no plugin systems, no extra CLIs, no logging frameworks, no type-checking
+setup, no CI config, no Dockerfile. If you think something is missing, say so
+in your reply instead of building it.
+
+WORKFLOW
+Build one stage at a time. After each stage, list the files you touched, give
+the verification command, commit, push, then stop and wait.

@@ -1,0 +1,4 @@
+1. Alice: Quick sync on the Orion mobile rollout.
+2. Bob: The push notification vendor is still blocked on sandbox credentials.
+3. Alice: Decision: we delay the Orion mobile rollout until sandbox access is confirmed.
+4. Sarah: Action item: I will chase the vendor for sandbox keys by Friday.

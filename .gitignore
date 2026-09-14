@@ -5,5 +5,7 @@ __pycache__/
 venv/
 data/llm_cache.json
 data/chroma_db/
+data/uploads/
+data/meetingmind.db
 *.mp4
 *.zip

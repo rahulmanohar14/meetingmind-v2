@@ -40,6 +40,7 @@ def load_transcript(path: str | Path) -> list[Turn]:
 
 
 def load_corpus(directory: str | Path) -> list[Turn]:
+    """Load .txt/.vtt files directly under `directory` (not subfolders)."""
     directory = Path(directory)
     paths = sorted(
         p
@@ -49,6 +50,22 @@ def load_corpus(directory: str | Path) -> list[Turn]:
     turns: list[Turn] = []
     for path in paths:
         turns.extend(load_transcript(path))
+    return turns
+
+
+def load_full_corpus(
+    data_dir: str | Path | None = None,
+    uploads_dir: str | Path | None = None,
+) -> list[Turn]:
+    """Load demo transcripts from data/ plus any files in data/uploads/."""
+    root = Path(__file__).resolve().parents[1]
+    data_dir = Path(data_dir) if data_dir is not None else root / "data"
+    uploads_dir = (
+        Path(uploads_dir) if uploads_dir is not None else root / "data" / "uploads"
+    )
+    turns = load_corpus(data_dir)
+    if uploads_dir.is_dir():
+        turns.extend(load_corpus(uploads_dir))
     return turns
 
 

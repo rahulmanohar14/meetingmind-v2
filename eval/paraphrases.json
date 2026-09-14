@@ -1,0 +1,34 @@
+[
+  {
+    "question": "What did Alice decide about beta seats?",
+    "note": "casual phrasing of the phased invite release decision"
+  },
+  {
+    "question": "What is blocking the launch and what other work does that delay?",
+    "note": "the live demo question"
+  },
+  {
+    "question": "Who is handling the DataCorp problem?",
+    "note": "vague noun for the vendor contract blocker"
+  },
+  {
+    "question": "Is the audit done?",
+    "note": "terse yes/no phrasing"
+  },
+  {
+    "question": "What happened with the budget?",
+    "note": "open-ended phrasing"
+  },
+  {
+    "question": "When are we launching?",
+    "note": "first person, no keywords from the transcript"
+  },
+  {
+    "question": "What did Sarah promise?",
+    "note": "weakest in-corpus score measured; sets the lower bound for the floor"
+  },
+  {
+    "question": "Any update on legal?",
+    "note": "elliptical phrasing"
+  }
+]

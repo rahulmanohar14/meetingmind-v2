@@ -1,0 +1,30 @@
+[
+  {
+    "question": "How do I make risotto?",
+    "note": "unrelated domain"
+  },
+  {
+    "question": "What is the capital of France?",
+    "note": "general knowledge the model knows but the corpus does not contain"
+  },
+  {
+    "question": "Write me a python function to reverse a linked list",
+    "note": "instruction rather than a corpus question"
+  },
+  {
+    "question": "What did the team decide about the Kubernetes migration?",
+    "note": "meeting-shaped but no such project in the corpus"
+  },
+  {
+    "question": "Who is the CEO of Microsoft?",
+    "note": "answerable from model priors, not from the meetings"
+  },
+  {
+    "question": "What time does the gym close?",
+    "note": "plausible chat question, no corpus grounding"
+  },
+  {
+    "question": "How many story points did we burn down last sprint?",
+    "note": "agile vocabulary absent from this corpus"
+  }
+]

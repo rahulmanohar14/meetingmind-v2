@@ -28,6 +28,10 @@ PERSIST_DIR = ROOT / "data" / "chroma_db"
 GOLDEN_PATH = ROOT / "eval" / "golden_set.json"
 RESULTS_PATH = ROOT / "benchmarks" / "results.md"
 
+# rrf_k controls how much weight the fusion gives to top ranks. 60 is the value
+# from the original RRF paper; the sweep shows what it is worth on this corpus.
+RRF_K_SWEEP = (10, 20, 60, 120)
+
 
 def _recall_at_k(ranked_ids: list[str], relevant: set[str], k: int) -> float:
     return 1.0 if any(tid in relevant for tid in ranked_ids[:k]) else 0.0
@@ -80,6 +84,25 @@ def _run_config(name: str, index, questions: list[dict]) -> dict:
     }
 
 
+def _run_rrf_sweep(index, questions: list[dict]) -> str:
+    lines = ["| rrf_k | recall@5 | MRR@10 |", "|---:|---:|---:|"]
+    n = len(questions)
+    for rrf_k in RRF_K_SWEEP:
+        recalls: list[float] = []
+        mrrs: list[float] = []
+        for item in questions:
+            hits = hybrid_search(index, item["question"], 10, rrf_k=rrf_k)
+            ranked_ids = [tid for tid, _ in hits]
+            relevant = set(item["answer_turn_ids"])
+            recalls.append(_recall_at_k(ranked_ids, relevant, 5))
+            mrrs.append(_mrr_at_k(ranked_ids, relevant, 10))
+        recall = sum(recalls) / n if n else 0.0
+        mrr = sum(mrrs) / n if n else 0.0
+        marker = " (default)" if rrf_k == 60 else ""
+        lines.append(f"| {rrf_k}{marker} | {recall:.3f} | {mrr:.3f} |")
+    return "\n".join(lines)
+
+
 def _format_table(rows: list[dict]) -> str:
     header = (
         "| config | recall@5 | MRR@10 | mean latency (ms) |\n"
@@ -107,9 +130,10 @@ def main() -> None:
     single_hop = [q for q in golden if q.get("type") == "single_hop"]
     multi_hop = [q for q in golden if q.get("type") == "multi_hop"]
     print(
-        f"Excluded {len(multi_hop)} multi_hop questions: "
-        "vector retrieval cannot answer them, so including them "
-        "would distort the comparison."
+        f"Excluded {len(multi_hop)} multi_hop questions: recall@5 over ranked "
+        "chunks is the wrong metric for them, since they need relation "
+        "traversal. They are measured against the graph in "
+        "scripts/eval_agent.py."
     )
     print(f"Evaluating {len(single_hop)} single_hop questions")
     if not single_hop:
@@ -127,8 +151,29 @@ def main() -> None:
     print()
     print(table)
 
+    print("\nSweeping rrf_k ...")
+    sweep_table = _run_rrf_sweep(index, single_hop)
+    print(sweep_table)
+
+    body = "\n\n".join(
+        [
+            "# Retrieval benchmark",
+            f"{len(single_hop)} single-hop golden questions. The "
+            f"{len(multi_hop)} multi-hop questions are evaluated separately in "
+            "`agent_eval.md`, because they need relation traversal rather than "
+            "ranked chunks.",
+            "## Retrieval configurations",
+            table,
+            "## rrf_k sensitivity (hybrid fusion)",
+            sweep_table,
+            f"With n={len(single_hop)}, one question is worth 0.083 of recall@5, "
+            "so gaps of a single question are noise. Read these numbers as "
+            "ruling out large regressions, not as fine-grained rankings.",
+        ]
+    )
+
     RESULTS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    RESULTS_PATH.write_text(table + "\n", encoding="utf-8")
+    RESULTS_PATH.write_text(body + "\n", encoding="utf-8")
     print(f"\nWrote {RESULTS_PATH}")
 
     total_s = time.perf_counter() - started

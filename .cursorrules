@@ -3,7 +3,9 @@ retrieval, a typed knowledge graph, and a LangGraph routing agent.
 
 ENVIRONMENT
 - Python 3.14 in .venv at the repo root. Windows, Git Bash.
-- Gemini free tier, roughly 10 requests per minute.
+- Groq (openai/gpt-oss-20b by default, override with GROQ_MODEL). Multiple keys
+  via GROQ_API_KEYS. The llama-3.1-8b-instant and llama-3.3-70b-versatile
+  models were removed from the Groq free tier; do not reintroduce them.
 
 HARD RULES
 - NO async, NO threading, NO asyncio.gather, NO concurrent.futures.

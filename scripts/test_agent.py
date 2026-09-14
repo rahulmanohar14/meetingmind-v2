@@ -9,6 +9,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+# Model answers contain characters cp1252 cannot encode (narrow no-break
+# space, typographic quotes), which crashed this script on the Windows console.
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 from engine.agent import run
 
 QUESTIONS = [

@@ -5,6 +5,7 @@ No LLM calls in this module.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -19,6 +20,22 @@ RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 _COLLECTION_NAME = "turns"
 _RERANKER: CrossEncoder | None = None
 
+# BGE v1.5 retrieval models are trained asymmetrically: queries carry this
+# instruction, passages are embedded bare. Omitting it costs ranking quality.
+BGE_QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
+
+_WORD = re.compile(r"\w+", re.UNICODE)
+
+# Cross-encoder relevance floor, calibrated against eval/paraphrases.json and
+# eval/off_topic.json (see scripts/eval_agent.py). Natural in-corpus phrasings
+# bottom out near -5.0 at top-1; off-topic questions peak near -9.7. -7.0 sits
+# between them with roughly 2 points of margin on each side.
+#
+# Golden-set questions score 2.0..10.1, far higher than real user phrasings,
+# so calibrating on the golden set alone produced a floor that rejected valid
+# questions.
+RELEVANCE_FLOOR = -7.0
+
 
 @dataclass
 class Index:
@@ -27,6 +44,7 @@ class Index:
     turns: list[Turn]
     turn_ids: list[str]
     embed_model: SentenceTransformer
+    embed_model_name: str
     persist_dir: str
 
 
@@ -81,6 +99,7 @@ def build_index(
         turns=list(turns),
         turn_ids=ids,
         embed_model=embed_model,
+        embed_model_name=embed_model_name,
         persist_dir=str(persist_dir),
     )
 
@@ -103,8 +122,15 @@ def load_index(
         turns=list(turns),
         turn_ids=ids,
         embed_model=embed_model,
+        embed_model_name=embed_model_name,
         persist_dir=str(persist_dir),
     )
+
+
+def _embed_query_text(index: Index, query: str) -> str:
+    if "bge" in index.embed_model_name.lower():
+        return BGE_QUERY_PREFIX + query
+    return query
 
 
 def dense_search(index: Index, query: str, k: int) -> list[tuple[str, float]]:
@@ -112,7 +138,7 @@ def dense_search(index: Index, query: str, k: int) -> list[tuple[str, float]]:
         return []
     n = min(k, len(index.turn_ids))
     q_emb = index.embed_model.encode(
-        [query],
+        [_embed_query_text(index, query)],
         normalize_embeddings=True,
         show_progress_bar=False,
     )
@@ -192,6 +218,27 @@ def rerank(
     return [(tid, float(score)) for tid, score in ranked[:top_n]]
 
 
+def rerank_with_threshold(
+    query: str,
+    turn_ids: list[str],
+    turns: list[Turn],
+    top_n: int,
+) -> list[tuple[str, float]]:
+    """Rerank, then keep only documents above RELEVANCE_FLOOR.
+
+    Returns [] when nothing clears the floor, which lets the agent decline
+    instead of answering from noise. Without this, hybrid_search returns `k`
+    documents for any query at all, so the agent's "no supporting evidence"
+    path was unreachable on the vector route.
+
+    Dropping the sub-floor tail also matters when the answer *is* present: the
+    launch-date question retrieves one document at 6.7 and four below -9, and
+    passing those four to the generator is pure distraction.
+    """
+    ranked = rerank(query, turn_ids, turns, top_n)
+    return [(tid, score) for tid, score in ranked if score >= RELEVANCE_FLOOR]
+
+
 def _get_reranker() -> CrossEncoder:
     global _RERANKER
     if _RERANKER is None:
@@ -200,4 +247,9 @@ def _get_reranker() -> CrossEncoder:
 
 
 def _tokenize(text: str) -> list[str]:
-    return text.lower().split()
+    """Word tokens for BM25.
+
+    `str.split()` leaves punctuation attached, so "keys?" and "keys" were
+    different terms and query punctuation silently lost matches.
+    """
+    return _WORD.findall(text.lower())

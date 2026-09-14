@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 from pathlib import Path
 
@@ -12,6 +13,23 @@ from networkx.readwrite import json_graph
 _PUNCT = re.compile(r"[^\w\s]", re.UNICODE)
 _LEADING_ARTICLE = re.compile(r"^(the|a|an)\s+", re.IGNORECASE)
 _WHITESPACE = re.compile(r"\s+")
+
+# Question scaffolding and generic meeting vocabulary. These tokens carry no
+# entity signal, so they must not seed a traversal.
+_STOPWORDS = frozenset(
+    """
+    a an the and or but of to for in on at by with from as is are was were be been
+    being do does did done doing has have had can could will would shall should may
+    might must what who whom whose when where why how which that this these those
+    there here it its their our your my me we they he she him her his them us you i
+    about into over under after before between during against without within if then
+    than so such no not any some more most other another each both few all only own
+    same too very just also still yet again once because while until up down out off
+    team teams meeting meetings week weeks day days date dates work working plan plans
+    status update updates thing things item items said say says tell said according
+    anything something everything happen happens happened change changed changes
+    """.split()
+)
 
 
 def normalise_name(name: str) -> str:
@@ -98,6 +116,45 @@ def build_graph(extractions: dict) -> nx.DiGraph:
     return g
 
 
+def graph_to_extractions(g: nx.DiGraph) -> dict:
+    """Flatten a graph back into entities/relations for rebuild/merge."""
+    entities: list[dict] = []
+    relations: list[dict] = []
+    for nid, attrs in g.nodes(data=True):
+        turns = attrs.get("source_turns") or ["unknown"]
+        for st in turns:
+            entities.append(
+                {
+                    "id": str(nid),
+                    "type": attrs.get("type", "Project"),
+                    "name": attrs.get("name", str(nid)),
+                    "source_turn": st,
+                }
+            )
+    for src, tgt, attrs in g.edges(data=True):
+        turns = attrs.get("source_turns") or ["unknown"]
+        for st in turns:
+            relations.append(
+                {
+                    "source": str(src),
+                    "target": str(tgt),
+                    "type": attrs.get("type", "depends_on"),
+                    "source_turn": st,
+                }
+            )
+    return {"entities": entities, "relations": relations}
+
+
+def merge_extractions(g: nx.DiGraph, extractions: dict) -> nx.DiGraph:
+    """Merge new extractions into an existing graph via entity resolution."""
+    existing = graph_to_extractions(g)
+    combined = {
+        "entities": existing["entities"] + list(extractions.get("entities") or []),
+        "relations": existing["relations"] + list(extractions.get("relations") or []),
+    }
+    return build_graph(combined)
+
+
 def save_graph(g: nx.DiGraph, path: str | Path) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -114,20 +171,67 @@ def load_graph(path: str | Path) -> nx.DiGraph:
     return g
 
 
-def find_entities(g: nx.DiGraph, query: str) -> list[str]:
-    """Return entity ids by normalised substring match (either direction)."""
-    q = normalise_name(query)
-    if not q:
-        return []
-    hits: list[str] = []
+def content_tokens(text: str) -> list[str]:
+    """Normalised content tokens: no punctuation, no stopwords, no 1-char tokens."""
+    return [
+        tok
+        for tok in normalise_name(text).split()
+        if len(tok) > 1 and tok not in _STOPWORDS
+    ]
+
+
+def _name_token_sets(g: nx.DiGraph) -> dict[str, set[str]]:
+    tokens: dict[str, set[str]] = {}
     for nid, attrs in g.nodes(data=True):
-        name = normalise_name(str(attrs.get("name", "")))
-        nid_norm = normalise_name(str(nid))
-        if name and (q in name or (len(name) >= 3 and name in q)):
-            hits.append(nid)
-        elif nid_norm and (q in nid_norm or (len(nid_norm) >= 3 and nid_norm in q)):
-            hits.append(nid)
-    return hits
+        name_tokens = set(content_tokens(str(attrs.get("name", ""))))
+        if not name_tokens:
+            # Fall back to the node id so unnamed nodes stay reachable.
+            name_tokens = set(content_tokens(str(nid)))
+        if name_tokens:
+            tokens[nid] = name_tokens
+    return tokens
+
+
+def find_entities(g: nx.DiGraph, query: str, limit: int = 8) -> list[str]:
+    """Return seed entity ids ranked by IDF-weighted token overlap with the query.
+
+    Phrase-level substring matching fails on this corpus because the extractor
+    emits sentence-shaped names ("DataCorp vendor contract is still unsigned"),
+    which never appear verbatim inside a user question. Token overlap matches
+    those names; IDF weighting stops tokens that are spread across many nodes
+    (such as "launch") from seeding every traversal on their own.
+    """
+    q_tokens = set(content_tokens(query))
+    if not q_tokens:
+        return []
+
+    node_tokens = _name_token_sets(g)
+    if not node_tokens:
+        return []
+
+    total = len(node_tokens)
+    doc_freq: dict[str, int] = {}
+    for tokens in node_tokens.values():
+        for tok in tokens:
+            doc_freq[tok] = doc_freq.get(tok, 0) + 1
+
+    scored: list[tuple[float, float, str]] = []
+    for nid, tokens in node_tokens.items():
+        overlap = q_tokens & tokens
+        if not overlap:
+            continue
+        weight = sum(
+            math.log(1.0 + total / (1.0 + doc_freq.get(tok, 0))) for tok in overlap
+        )
+        if weight <= 0.0:
+            continue
+        # Tie-break toward names the question covers most completely, so
+        # "DataCorp vendor contract" outranks the bare token "contract".
+        precision = len(overlap) / len(tokens)
+        scored.append((weight + precision, precision, nid))
+
+    scored.sort(key=lambda item: (-item[0], -item[1], item[2]))
+    return [nid for _weight, _precision, nid in scored[:limit]]
 
 
 def local_search(

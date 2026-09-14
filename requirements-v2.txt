@@ -7,3 +7,4 @@ networkx==3.6.1
 langgraph==1.2.11
 streamlit==1.63.0
 pandas==3.0.5
+tqdm==4.70.1

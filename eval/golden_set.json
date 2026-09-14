@@ -1,0 +1,86 @@
+[
+  {
+    "question": "What is blocking production API keys?",
+    "answer_turn_ids": [
+      "meeting_week1:1"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "What action item did Marcus commit to by Monday, April 28?",
+    "answer_turn_ids": [
+      "meeting_week1:9"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "Why are budget approvals delayed, according to finance?",
+    "answer_turn_ids": [
+      "meeting_week1:13"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "What is the status of the accessibility audit?",
+    "answer_turn_ids": [
+      "meeting_week2:3"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "What action item did Bob commit to by Wednesday, May 1?",
+    "answer_turn_ids": [
+      "meeting_week2:8"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "What was the decision regarding the release of beta seats?",
+    "answer_turn_ids": [
+      "meeting_week2:7"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "What action item did Marcus commit to by Wednesday, May 1?",
+    "answer_turn_ids": [
+      "meeting_week3:9"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "Who will coordinate remediation sign-off once audit evidence arrives?",
+    "answer_turn_ids": [
+      "meeting_week3:11"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "According to Alice, how many meetings have vendor, budget, audit, and API concerns persisted?",
+    "answer_turn_ids": [
+      "meeting_week3:15"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "How many business days does legal need to review the updated TOS?",
+    "answer_turn_ids": [
+      "sample_transcript:6"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "When will Bob have the feature flag and rollout checklist ready?",
+    "answer_turn_ids": [
+      "sample_transcript:11"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "What is the agreed-upon launch date for the beta version?",
+    "answer_turn_ids": [
+      "sample_transcript:19"
+    ],
+    "type": "single_hop"
+  }
+]

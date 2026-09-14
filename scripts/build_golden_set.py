@@ -107,12 +107,25 @@ def main() -> None:
             if len(collected) >= TARGET_QUESTIONS:
                 break
 
+    # Keep any hand-added multi_hop entries already present in the file.
+    preserved_multi_hop: list[dict] = []
+    if OUT_PATH.exists():
+        existing = json.loads(OUT_PATH.read_text(encoding="utf-8"))
+        if not isinstance(existing, list):
+            raise ValueError(f"Expected a JSON array in {OUT_PATH}")
+        for item in existing:
+            if isinstance(item, dict) and item.get("type") == "multi_hop":
+                preserved_multi_hop.append(item)
+
+    output = collected + preserved_multi_hop
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with OUT_PATH.open("w", encoding="utf-8") as f:
-        json.dump(collected, f, ensure_ascii=False, indent=2)
+        json.dump(output, f, ensure_ascii=False, indent=2)
         f.write("\n")
 
     print(f"Wrote {len(collected)} single_hop questions to {OUT_PATH}")
+    if preserved_multi_hop:
+        print(f"Preserved {len(preserved_multi_hop)} existing multi_hop questions")
     print(f"API calls used: {get_call_count()}")
     print()
     # Hand-edit next: append ~5 multi_hop items (see module docstring).

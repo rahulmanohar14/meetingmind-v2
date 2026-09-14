@@ -1,0 +1,20 @@
+1. Alice: Third weekly launch standup, and we need to address the unresolved items for the third week running.
+2. Marcus: DataCorp vendor contract is still unresolved, even after escalation through both legal teams.
+3. Bob: Because of that, our production credential exchange is incomplete and integration remains blocked.
+4. Sarah: Accessibility audit is still not done, and we still do not have the final remediation checklist.
+5. Alice: Budget approval is still pending from finance, so paid launch activities remain frozen.
+6. Bob: API rate limits are still unresolved and projected traffic could exceed current thresholds.
+7. Sarah: We keep repeating the same risks each week, which is impacting launch confidence.
+8. Alice: Decision: if contract and audit are not cleared by Friday, we shift to internal-only release on May 1.
+9. Bob: Action item: I will finalize a fallback architecture that avoids DataCorp dependency by Thursday, May 2.
+10. Marcus: Action item: I will obtain a written finance timeline for budget approval by Wednesday, May 1.
+11. Sarah: Can we also align on who signs off accessibility once the audit finally lands?
+12. Alice: Yes, Sarah will coordinate remediation sign-off with QA and legal once audit evidence arrives.
+13. Bob: On API limits, I can add hard safeguards but we still need budget for additional capacity.
+14. Marcus: Finance acknowledged receipt, but there is still no approved number attached to our request.
+15. Sarah: DataCorp delay plus audit delay together are now our biggest launch narrative risk.
+16. Alice: Agreed, and this is now the third meeting where vendor, budget, audit, and API concerns persist.
+17. Bob: I will circulate a blocker dashboard so these recurring issues stay visible between standups.
+18. Marcus: I will attach contract correspondence history so stakeholders see the escalation trail.
+19. Sarah: Please include a timeline view showing each issue has remained unresolved for three weeks.
+20. Alice: Thanks everyone, we will treat these as critical recurring blockers until explicitly closed.

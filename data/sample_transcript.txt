@@ -1,0 +1,25 @@
+1. Alice: Good morning everyone — hope you all had a decent weekend. Bob, how was the game?
+2. Bob: Oh, the Celtics game was wild; triple overtime, I was up way too late.
+3. Sarah: I mostly caught up on sleep and sketched a few ideas for the hero section.
+4. Alice: Great. Let’s get into launch planning — the board wants a clear date this week.
+5. Bob: From engineering, if we include the new auth flow, we need two more sprints, honestly.
+6. Sarah: I’m still polishing flows; the hero section is close but I don’t want to overpromise on timing.
+7. Marcus: Legal needs five business days to review the updated TOS; anything faster is a risk.
+8. Alice: Understood. On pricing, we have two options on the table — are we still split?
+9. Bob: I’m still worried about the API rate limits in the first week.
+10. Sarah: Same — but we could throttle invites if we have to, right?
+11. Alice: We’re going with a staged rollout: beta cohort first, then public the following week. That’s final.
+12. Bob: I’ll have the feature flag and rollout checklist ready by this Friday, April 25.
+13. Marcus: I’ll get the TOS and privacy addendum in front of the exec sponsor by next Tuesday, close of business.
+14. Sarah: I will deliver the final marketing landing page to Alice by Thursday noon for review.
+15. Alice: Has anyone run the accessibility audit on the new checkout flow? I haven’t seen results.
+16. Bob: I thought QA was running that — I’m not sure we have a clear owner yet.
+17. Alice: On the budget question, let’s circle back after we get Q2 projections — I don’t want to guess today.
+18. Marcus: Fair — I can mention budget risks in the same legal note, but the spend itself isn’t decided.
+19. Bob: I’ll need Sarah’s creative assets in before I can sensibly time the staging work.
+20. Alice: We’re going with the April 28 launch for the beta, full public in May, agreed upon by everyone on this call.
+21. Sarah: That timeline works for design handoff, as long as copy freeze is this Wednesday.
+22. Bob: I’ll coordinate smoke tests with QA once the branch is feature-complete — no blockers from my side right now.
+23. Alice: One open thing — are we still doing the podcast promo on day one, or is that a maybe?
+24. Sarah: I’m leaning toward yes, but we have not decided creative yet.
+25. Alice: Cool — let’s park creative for Wednesday’s standup. Thanks, everyone — I’ll send notes after this.

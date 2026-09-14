@@ -1,0 +1,20 @@
+1. Alice: Morning team, let's focus on launch readiness for the May 1 target we set with leadership.
+2. Bob: Engineering is close, but the DataCorp vendor contract is still unsigned so production API keys are blocked.
+3. Marcus: I followed up with DataCorp legal yesterday and we still do not have signature confirmation.
+4. Sarah: Design handoff is done, but the accessibility audit has not been completed yet.
+5. Alice: I am also still waiting on finance because budget approval for launch support remains pending.
+6. Bob: Another risk is API rate limits in launch week if invite volume spikes too quickly.
+7. Sarah: Should we gate onboarding traffic if rate limits become an issue on day one?
+8. Alice: Decision: we are keeping May 1 as the beta launch date and planning around these blockers.
+9. Bob: Action item: I will prepare a rate-limit mitigation plan and feature-flag rollout by Tuesday, April 29.
+10. Marcus: Action item: I will escalate the DataCorp contract with their counsel and send a status update by Monday, April 28.
+11. Sarah: I can prioritize accessibility fixes once the audit findings are available.
+12. Alice: Has anyone confirmed who owns final sign-off for the accessibility audit report?
+13. Bob: QA can support, but we still need the checklist finalized before they can execute.
+14. Marcus: On budget, finance said approvals are delayed because they are reconciling Q2 changes.
+15. Alice: Let's not defer this forever, but we may need to circle back in Wednesday standup if finance does not respond.
+16. Sarah: From a launch comms perspective, uncertainty on budget is already affecting ad booking.
+17. Bob: And if DataCorp slips further, our integration tests cannot finish in staging.
+18. Alice: Please keep source notes tight; these unresolved items need visibility across meetings.
+19. Marcus: Understood, I will document the open legal dependency and escalation path.
+20. Alice: Thanks everyone, we will reconvene next week and review progress on each blocker.

@@ -1,0 +1,20 @@
+1. Alice: Week two check-in, and I want direct updates on the blockers we flagged last standup.
+2. Marcus: Still no word from DataCorp on the vendor contract signature despite two follow-ups.
+3. Bob: That contract gap is now delaying our final integration test pass for launch readiness.
+4. Sarah: Accessibility audit is still not done; compliance vendor moved us to late this week.
+5. Alice: Budget approval is also still pending, finance has not cleared campaign and support spend yet.
+6. Bob: API rate limits remain a launch-week risk unless we cap early user enrollment.
+7. Sarah: Could we stage invites in waves so we reduce burst traffic against the API?
+8. Alice: Decision: we will run a phased invite release instead of opening all beta seats on day one.
+9. Bob: Action item: I will implement invite throttling controls and test them by Wednesday, May 1.
+10. Marcus: Action item: I will request executive legal escalation with DataCorp and report back by Tuesday, April 30.
+11. Sarah: I can update the onboarding UX copy to reflect phased rollout expectations.
+12. Alice: Do we have a committed completion date from finance for the budget approval queue?
+13. Marcus: Finance told me they are targeting end of week, but they did not guarantee it.
+14. Bob: If budget does not clear, we cannot lock extra cloud capacity for launch traffic.
+15. Sarah: And without the accessibility audit, we risk shipping with known compliance exposure.
+16. Alice: Let's capture these as unresolved for the second week so memory tracking stays accurate.
+17. Bob: For context, API limit alerts were triggered in our latest load simulation again.
+18. Marcus: I will include contract risk, budget delay, and audit status in my legal summary.
+19. Sarah: I appreciate that; this is the same set of blockers we discussed last week.
+20. Alice: Thanks, next week we need concrete movement, not just status repeats.

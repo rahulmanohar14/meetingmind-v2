@@ -1,0 +1,1475 @@
+{
+  "company": {
+    "name": "Meridian Software",
+    "description": "B2B SaaS, ~90 people, sells a workflow analytics product to mid-market and enterprise customers. The flagship release this period is Orion, a rebuilt reporting and onboarding experience.",
+    "timeline_start": "2025-03-03",
+    "timeline_end": "2025-08-29",
+    "note_on_inherited_transcripts": "Four transcripts already exist in data/ (sample_transcript, meeting_week1, meeting_week2, meeting_week3) and stay in the corpus. They are the launch standups of 2025-04-14, 04-21, 04-28 and 05-05. They contain day-of-week/date slips (e.g. 'Wednesday, May 1' when May 1 2025 is a Thursday) and disagree with each other about whether the beta date was April 28 or May 1. Both are kept, not corrected: they are realistic transcription artefacts and one of them is a deliberate inconsistency thread. They also literally write 'Decision:' and 'Action item:' as line prefixes, which is the one thing generated meetings must NOT copy. See speech_style.how_decisions_surface."
+  },
+  "cast": [
+    {
+      "name": "Alice",
+      "full_name": "Alice Reyes",
+      "role": "VP Product. Chairs standups and all-hands. Owns the launch decision.",
+      "style": "Opens with a short personal beat then drives hard to a decision. Always asks for an owner and a date. Uses 'let's park that', 'circle back', 'I don't want to guess today'. Cuts off circular discussion.",
+      "active_from": "2025-03-03",
+      "concentration": "Present everywhere. She chairs."
+    },
+    {
+      "name": "Bob",
+      "full_name": "Bob Ferreira",
+      "role": "Staff engineer, platform and backend. Owns rate limits, capacity, feature flags.",
+      "style": "Hedges with numbers he half-remembers. 'honestly', 'hang on—', 'two more sprints, realistically'. Interrupts himself mid-sentence. Volunteers feature flags as the answer to everything. Pessimistic about launch week.",
+      "active_from": "2025-03-03",
+      "concentration": "Orion and platform. Rarely in Atlas reviews."
+    },
+    {
+      "name": "Sarah",
+      "full_name": "Sarah Okonjo",
+      "role": "Design lead. Owns flows, copy freeze, and raised accessibility first.",
+      "style": "Careful not to overpromise. 'I don't want to overpromise on timing', 'that works as long as—'. Raises compliance and accessibility even when nobody asked. Trails off when unsure.",
+      "active_from": "2025-03-03",
+      "concentration": "Orion and accessibility. Never in Atlas or finance meetings."
+    },
+    {
+      "name": "Marcus",
+      "full_name": "Marcus Vandermeer",
+      "role": "Legal counsel. Owns vendor contracts, TOS, DataCorp escalation.",
+      "style": "Formal and slightly stiff. Counts things in business days. 'I'd want that in writing', 'I can't commit to that timeline'. Describes process before conclusions. Rarely gives a hard date.",
+      "active_from": "2025-03-03",
+      "concentration": "HEAVILY CONCENTRATED on datacorp_contract and legal sign-off. Absent from Atlas reviews, telemetry, capacity and most of July and August."
+    },
+    {
+      "name": "Priya",
+      "full_name": "Priya Raghunathan",
+      "role": "Engineering manager. Joined to run delivery across Orion and Atlas.",
+      "style": "Terse. Refers to tickets by number ('ORI-412'). 'Who's blocked?', 'that's two sprints, not one'. Impatient with status without a decision. Pushes back on scope openly.",
+      "active_from": "2025-04-07",
+      "concentration": "Delivery across both projects, but only from April onwards. Completely absent from March."
+    },
+    {
+      "name": "Danny",
+      "full_name": "Danny Kwok",
+      "role": "QA lead. Owns test passes, smoke tests, audit verification.",
+      "style": "Dry and self-deprecating. 'I ran it twice and got two different answers.' Flags flaky tests nobody wants to hear about. Understates severity then turns out to be right.",
+      "active_from": "2025-03-03",
+      "concentration": "HEAVILY CONCENTRATED on accessibility_audit verification and test passes. Absent from finance, contract and Atlas discussions."
+    },
+    {
+      "name": "Elena",
+      "full_name": "Elena Fischer",
+      "role": "Finance and BizOps. Owns budget approval, headcount reqs, vendor spend.",
+      "style": "Apologetic about process she does not control. 'I can't commit a number today', 'we're still reconciling'. Speaks in quarters and approval queues. Never says no outright.",
+      "active_from": "2025-03-17",
+      "concentration": "HEAVILY CONCENTRATED on budget_approval, atlas_scope and hiring_freeze. Never attends an Orion engineering review."
+    },
+    {
+      "name": "Tomas",
+      "full_name": "Tomas Oliveira",
+      "role": "Customer success lead. Owns Ridgeline and the enterprise pipeline.",
+      "style": "Brings customer anecdotes and account names as evidence. 'Ridgeline are asking again.' Emotive about churn risk. Quotes customers verbatim.",
+      "active_from": "2025-03-10",
+      "concentration": "HEAVILY CONCENTRATED on ridgeline. Appears in roughly a third of meetings and almost always talks about customers. Absent from Atlas, budget and capacity discussions entirely."
+    },
+    {
+      "name": "Nina",
+      "full_name": "Nina Abebe",
+      "role": "Data and analytics. Owns activation metrics and instrumentation.",
+      "style": "Qualifies every number. 'directionally right', 'I wouldn't put that in a board deck yet'. Points out instrumentation gaps that make questions unanswerable.",
+      "active_from": "2025-03-31",
+      "concentration": "HEAVILY CONCENTRATED on rate_limits, the telemetry rebuild and activation metrics. Never in a legal, contract or Atlas meeting."
+    },
+    {
+      "name": "Raj",
+      "full_name": "Raj Menon",
+      "role": "CTO and exec sponsor. Attends all-hands and escalations only.",
+      "style": "Big-picture and brief. Asks one sharp question that reframes the discussion, then leaves. Rounds numbers. Occasionally contradicts a detail the team stated precisely.",
+      "active_from": "2025-03-03",
+      "concentration": "MOST CONCENTRATED OF ALL. Six all-hands out of forty-five meetings, nothing else. Speaks maybe four times per all-hands."
+    }
+  ],
+  "projects": [
+    {
+      "name": "Orion",
+      "start_date": "2025-03-03",
+      "description": "Rebuilt reporting and onboarding experience. The flagship launch.",
+      "status_arc": [
+        "March: planning, board wants a committed date",
+        "April: blocked on DataCorp contract, accessibility audit, and budget",
+        "early May: fallback to an internal-only release",
+        "late May: in-house integration replaces the DataCorp dependency",
+        "June 9: public launch slips again to June 23",
+        "June 23: launched publicly",
+        "July: stabilisation after the June 16 incident",
+        "August: steady state, post-launch retro"
+      ]
+    },
+    {
+      "name": "Atlas",
+      "start_date": "2025-03-17",
+      "description": "Migration of billing off the legacy vendor onto in-house invoicing.",
+      "status_arc": [
+        "March: mentioned in passing, then scoped at one quarter",
+        "April: estimate doubles once proration and tax are understood",
+        "May: descoped to phase 1 only",
+        "June: an engineer is pulled onto Orion, slips again",
+        "July: descoped a second time, dunning deferred",
+        "August: phase 1 ships, phase 2 formally deferred to Q4"
+      ]
+    },
+    {
+      "name": "Accessibility remediation",
+      "start_date": "2025-04-07",
+      "description": "WCAG 2.2 AA conformance for the checkout and onboarding flows.",
+      "status_arc": [
+        "April: audit commissioned, vendor reschedules repeatedly",
+        "May 19: findings land, ownership immediately disputed",
+        "June: ownership split three ways after the single-owner model fails",
+        "July: remediation sprints",
+        "August 11: signed off"
+      ]
+    },
+    {
+      "name": "Ridgeline onboarding",
+      "start_date": "2025-05-05",
+      "description": "First enterprise customer onboarding, used as the reference account.",
+      "status_arc": [
+        "May: pilot agreed, contract value quoted",
+        "June: blocked on SAML SSO that was assumed to exist",
+        "June: security questionnaire stalls, churn threatened",
+        "July 21: live on a custom plan"
+      ]
+    },
+    {
+      "name": "Telemetry rebuild",
+      "start_date": "2025-06-02",
+      "description": "Replacing ad-hoc instrumentation so activation and funnel questions are answerable.",
+      "status_arc": [
+        "June 2: proposed by Nina",
+        "June 30: deprioritised for Q3",
+        "July 7: revived after the incident post-mortem",
+        "August: a thin version ships, full scope still unfunded"
+      ]
+    }
+  ],
+  "threads": [
+    {
+      "id": "datacorp_contract",
+      "name": "DataCorp vendor contract",
+      "referential_aliases": [
+        "the DataCorp thing",
+        "the contract",
+        "the vendor situation",
+        "that",
+        "the signature"
+      ],
+      "beginning": "2025-03-10: DataCorp send a renewal notice with new terms. Marcus flags that the current agreement does not cover production API keys for Orion.",
+      "complications": [
+        "2025-03-24: DataCorp go quiet. Marcus has sent one follow-up.",
+        "2025-04: still unsigned; production API keys blocked; integration tests cannot finish (this is the state the four inherited transcripts describe)",
+        "2025-05-12: DataCorp change counsel, restarting the review, and demand a 30% uplift",
+        "2025-05-12: Bob proposes building the integration in-house instead",
+        "2025-06: DataCorp removed from the critical path entirely"
+      ],
+      "resolution": "2025-07-14: a reduced DataCorp contract is signed covering the reporting feed only, not the production keys. Partially resolved: the original blocker was solved by removing the dependency, not by the contract."
+    },
+    {
+      "id": "accessibility_audit",
+      "name": "Accessibility audit and remediation",
+      "referential_aliases": [
+        "the audit",
+        "the findings",
+        "the compliance thing",
+        "that",
+        "the a11y work"
+      ],
+      "beginning": "2025-03-24: Sarah asks who owns the accessibility audit on the new checkout flow. Nobody does, and the question is parked rather than answered.",
+      "complications": [
+        "2025-04: audit commissioned; the compliance vendor reschedules three times",
+        "2025-05-19: findings land with 41 issues, 6 of them blocking",
+        "2025-05-19: Alice assigns remediation sign-off to Sarah alone",
+        "2025-06-09: the single-owner model fails; sign-off is split three ways",
+        "2025-07: remediation sprints compete with post-launch stabilisation"
+      ],
+      "resolution": "2025-08-11: all blocking issues closed and conformance signed off by Marcus."
+    },
+    {
+      "id": "budget_approval",
+      "name": "Budget approval for launch support",
+      "referential_aliases": [
+        "the budget",
+        "the approval",
+        "the spend",
+        "that",
+        "finance"
+      ],
+      "beginning": "2025-04-07: Alice requests launch support budget for campaign spend and extra cloud capacity.",
+      "complications": [
+        "2025-04: finance are reconciling Q2 changes; no committed date",
+        "2025-05: partial approval for cloud capacity only, campaign spend held",
+        "2025-06-16: a spend freeze lands company-wide after the incident",
+        "2025-07: the request is rolled into H2 planning rather than approved or denied"
+      ],
+      "resolution": "DELIBERATE NON-RESOLUTION. At 2025-08-29 the launch support budget has still never been approved or refused. It is absorbed into H2 planning and quietly stops being discussed. Nobody ever says no."
+    },
+    {
+      "id": "rate_limits",
+      "name": "API rate limits and capacity",
+      "referential_aliases": [
+        "the rate limits",
+        "the limits",
+        "capacity",
+        "that",
+        "the throttling"
+      ],
+      "beginning": "2025-03-31: Bob's load simulation triggers rate limit alerts at projected launch volume.",
+      "complications": [
+        "2025-04: invite throttling proposed as mitigation",
+        "2025-05: throttling shipped but only on the invite path",
+        "2025-06-16: a real incident during launch week prep; the reporting endpoint melts for 40 minutes",
+        "2025-06-23: hard safeguards added under time pressure"
+      ],
+      "resolution": "2025-07-07: hard per-tenant limits plus autoscaling ship. Closed."
+    },
+    {
+      "id": "launch_date",
+      "name": "Orion launch date",
+      "referential_aliases": [
+        "the date",
+        "the launch",
+        "the 28th",
+        "that",
+        "go-live"
+      ],
+      "beginning": "2025-03-03: the board asks for a committed launch date.",
+      "complications": [
+        "2025-04: the inherited transcripts disagree — April 28 is 'agreed upon by everyone on this call' in one, May 1 is 'set with leadership' in another",
+        "2025-05-05: fallback to internal-only release if blockers are not cleared",
+        "2025-06-02: public launch set for June 9",
+        "2025-06-09: slips to June 23 because the audit findings are not closed",
+        "later meetings: people misremember which date was originally agreed"
+      ],
+      "resolution": "2025-06-23: Orion launches publicly."
+    },
+    {
+      "id": "atlas_scope",
+      "name": "Atlas billing migration scope",
+      "referential_aliases": [
+        "Atlas",
+        "the migration",
+        "the billing work",
+        "that",
+        "phase two"
+      ],
+      "beginning": "2025-03-17: Atlas comes up in passing as the next thing after Orion. Properly scoped at one quarter on 2025-03-27.",
+      "complications": [
+        "2025-04-24: the estimate doubles once proration and tax handling are understood",
+        "2025-05-22: descoped to phase 1, dunning and proration deferred",
+        "2025-06-19: an engineer is pulled onto Orion stabilisation",
+        "2025-07-31: descoped a second time"
+      ],
+      "resolution": "DELIBERATE NON-RESOLUTION. Phase 1 ships 2025-08-28. Phase 2 is 'deferred to Q4' with no owner and no date, which everyone present understands to mean it is not happening."
+    },
+    {
+      "id": "ridgeline",
+      "name": "Ridgeline enterprise account",
+      "referential_aliases": [
+        "Ridgeline",
+        "the enterprise deal",
+        "them",
+        "that account",
+        "the reference customer"
+      ],
+      "beginning": "2025-05-05: Tomas brings Ridgeline as the first enterprise pilot and reference account.",
+      "complications": [
+        "2025-06-05: Ridgeline require SAML SSO, which the team assumed already existed and does not",
+        "2025-06-27: a 200-question security questionnaire stalls for three weeks",
+        "2025-07-03: Tomas reports Ridgeline are 'reconsidering'"
+      ],
+      "resolution": "2025-07-21: Ridgeline go live on a custom plan with SSO delivered as a one-off."
+    },
+    {
+      "id": "hiring_freeze",
+      "name": "Team capacity and the frozen req",
+      "referential_aliases": [
+        "the req",
+        "the headcount",
+        "the backfill",
+        "that",
+        "the hire"
+      ],
+      "beginning": "2025-04-24: Priya opens a req for a second backend engineer.",
+      "complications": [
+        "2025-05: the req is frozen alongside the budget",
+        "2025-06-16: the preferred candidate declines after six weeks of silence",
+        "2025-06-30: a contractor is approved as a stopgap because contractor spend sits in a different budget line"
+      ],
+      "resolution": "DELIBERATE NON-RESOLUTION. The contractor starts 2025-06-30 and is extended twice. The full-time req is never unfrozen and is still open at the end of the timeline."
+    }
+  ],
+  "reversed_or_amended_decisions": [
+    {
+      "id": "D1",
+      "decided": "2025-03-03, Alice: staged rollout — beta cohort first, then public the following week.",
+      "amended": "2025-04-28 (meeting_week2, inherited): phased invite release instead of opening all beta seats on day one.",
+      "reversed": "2025-06-02, Alice: reversed entirely. Full public availability on day one, no phased invites, because the internal release showed phased invites cut activation almost in half. Bob objects that this is exactly the traffic pattern he warned about."
+    },
+    {
+      "id": "D2",
+      "decided": "2025-04-21 (meeting_week1, inherited): keeping May 1 as the beta launch date.",
+      "amended": "2025-05-05 (meeting_week3, inherited): if contract and audit are not cleared by Friday, shift to internal-only release.",
+      "reversed": "2025-06-02: public launch set for June 9. Amended again 2025-06-09 to June 23. Alice acknowledges out loud that this is the third date."
+    },
+    {
+      "id": "D3",
+      "decided": "2025-04-10, Alice: we are integrating with DataCorp, not replacing them. Building our own is out of scope.",
+      "amended": null,
+      "reversed": "2025-05-12, Alice: reversed after DataCorp change counsel and demand a 30% uplift. Bob builds the in-house fallback. Marcus notes for the record that he advised against the original decision."
+    },
+    {
+      "id": "D4",
+      "decided": "2025-06-30, Alice: the telemetry rebuild is deprioritised for Q3.",
+      "amended": null,
+      "reversed": "2025-07-07: reversed one week later at the incident post-mortem, when it turns out nobody can answer how many tenants the June 16 incident affected. Nina is visibly restrained about it."
+    },
+    {
+      "id": "D5",
+      "decided": "2025-05-19, Alice: Sarah owns accessibility remediation sign-off.",
+      "amended": "2025-06-09: split three ways — Sarah owns design fixes, Danny owns verification, Marcus owns legal conformance sign-off. The single-owner model failed because the three sign-offs need different authority.",
+      "reversed": null
+    }
+  ],
+  "inconsistent_facts": [
+    {
+      "id": "F1",
+      "fact": "Number of accessibility audit findings",
+      "variants": [
+        "2025-05-19, Sarah: 41 issues, 6 blocking",
+        "2025-05-26, Danny: 38, after we merged the duplicates",
+        "2025-06-27 all-hands, Alice: about forty",
+        "2025-08-11, Marcus: the 38 findings"
+      ],
+      "reconciled": false,
+      "note": "Nobody ever states which count is authoritative. Both 41 and 38 are used after the other has been said."
+    },
+    {
+      "id": "F2",
+      "fact": "Ridgeline contract value",
+      "variants": [
+        "2025-05-05, Tomas: 240k ARR",
+        "2025-06-02, Elena: 210k after the discount",
+        "2025-07-25 all-hands, Raj: a quarter of a million"
+      ],
+      "reconciled": false,
+      "note": "Elena's number is the only one anyone could defend, and nobody asks her."
+    },
+    {
+      "id": "F3",
+      "fact": "The originally agreed beta launch date",
+      "variants": [
+        "sample_transcript (inherited): April 28, 'agreed upon by everyone on this call'",
+        "meeting_week1 (inherited): May 1, 'the target we set with leadership'",
+        "2025-06-09, Bob: we said the 28th originally",
+        "2025-06-09, Alice: it was always May 1"
+      ],
+      "reconciled": false,
+      "note": "Inherited from the original four transcripts, which genuinely disagree. Later speakers misremember in both directions."
+    },
+    {
+      "id": "F4",
+      "fact": "How many times Marcus followed up with DataCorp",
+      "variants": [
+        "2025-04-28 (inherited): two follow-ups",
+        "2025-05-12, Marcus: four, maybe five",
+        "2025-06-05, Marcus: I've genuinely lost count"
+      ],
+      "reconciled": false
+    }
+  ],
+  "speech_style": {
+    "general": "These are real spoken transcripts, not minutes and not prose. Sentences break off. People talk over each other, answer a question two turns after it was asked, and drift into tangents that go nowhere. Filler ('yeah', 'I mean', 'sort of', 'right?') appears but is not in every turn. Turns vary from three words to sixty. Not every meeting reaches a conclusion.",
+    "avoid": [
+      "Clean, well-formed, self-contained sentences in every turn",
+      "Every speaker restating the full name of a project or issue each time",
+      "Summary-style turns that recap what was just said",
+      "Every meeting ending with a tidy decision and action items",
+      "Uniform turn length"
+    ],
+    "turn_rhythm": {
+      "requirement": "MANDATORY. Real meetings are lopsided and uneven. A transcript where speakers alternate in a fixed rotation and every turn is the same length is the clearest tell that it was written rather than transcribed.",
+      "rules": [
+        "NEVER rotate through the attendees in a fixed order. Speaker order must be irregular and unpredictable.",
+        "The same person frequently speaks two or three turns in a row, continuing their own thought or correcting themselves.",
+        "Many turns are two to six words: 'Yeah.', 'Still nothing.', 'Wait, what?', 'Same as Monday.', 'Not yet.', 'Mm.'",
+        "A few turns run forty to sixty words, when someone explains something properly or rambles.",
+        "One or two people dominate the meeting. At least one person in the room barely speaks, contributing two or three short turns in total.",
+        "Include at least three interruptions or abandoned sentences that end in a dash.",
+        "At least once, a question is answered two or three turns after it was asked, or never answered at all.",
+        "Two people occasionally talk past each other for a few turns before noticing.",
+        "Before finishing, check the speaker order. If it reads A, B, C, D, A, B, C, D then it is wrong and must be redone unevenly."
+      ]
+    },
+    "anchors": {
+      "requirement": "MANDATORY. This corpus is used to answer questions about what was said, so every meeting must contain specific checkable facts, not only vague references.",
+      "rules": [
+        "At least eight turns per meeting must contain a concrete anchor: a named person, a specific weekday or date, a number, a ticket id (ORI-412, ATL-88), a named system, a named vendor, or a named customer.",
+        "Anchor a topic the first time it is raised in the meeting, then refer back to it with pronouns and short references afterwards.",
+        "Anchors must be consistent with the meeting date and with what the bible says has already happened. Never invent a date later than the meeting date as something that already occurred."
+      ]
+    },
+    "no_repetition": {
+      "requirement": "MANDATORY. A speaker's characteristic phrasing is a tic, not a refrain.",
+      "rules": [
+        "Never reuse a character's catchphrase more than once in the same transcript. If Bob says 'two more sprints, realistically' once, he must not say it again in that meeting.",
+        "Never repeat the same complaint or status in near-identical words twice. If a point is restated, someone restates it differently, or with irritation that it is being restated.",
+        "Do not end the meeting by listing everything that was just discussed.",
+        "A speaker's characteristic phrasing belongs to that speaker alone. Never put one person's tic in another person's mouth."
+      ]
+    },
+    "how_decisions_surface": {
+      "requirement": "MANDATORY. Decisions and commitments must be buried in conversation, never announced as labelled minutes.",
+      "banned_patterns": [
+        "Any turn beginning 'Decision:' — this is the single worst anti-pattern",
+        "Any turn beginning 'Action item:'",
+        "Any turn beginning 'Owner:', 'Next steps:', 'Summary:', 'Update:' or 'Status:'",
+        "A speaker cleanly stating a decision that nobody argued about first"
+      ],
+      "anti_pattern_note": "The inherited meeting_week1.txt and meeting_week2.txt do exactly this, writing 'Decision: we are keeping May 1...' and 'Action item: I will prepare...' as literal line prefixes. They stay in the corpus because they are real history, but generated meetings must NOT copy that shape.",
+      "instead": [
+        "A decision emerges out of disagreement: two people argue, a third proposes a compromise, the chair accepts it half-heartedly",
+        "Sometimes the decision is stated by the wrong person — someone who does not own it says 'so we're doing X then', and nobody corrects them",
+        "Sometimes it is only half-stated and confirmed a few turns later, or in a later meeting: 'wait, did we actually decide that?'",
+        "Commitments arrive sideways: 'I can probably get that done by Thursday', 'leave it with me', 'I'll look at it after the audit thing'",
+        "Some meetings raise a decision and fail to make it, and that failure is not commented on"
+      ]
+    },
+    "referential_chains": {
+      "requirement": "MANDATORY. Speakers must refer back to things already discussed — earlier in the same meeting and in earlier meetings — using pronouns and deictic references rather than the full noun phrase. This is the single most important stylistic property of the corpus.",
+      "in_meeting": "Once a topic has been named once in a meeting, later turns in that meeting should mostly refer to it as 'that', 'it', 'this', 'the same thing', or by a short alias.",
+      "across_meetings": "Open with references to prior meetings that do not restate what happened: 'that slipped again', 'still no word', 'she's still on it', 'the thing we agreed last week', 'same as Monday', 'did that ever land?'",
+      "people": "Refer to absent or previously-mentioned people by pronoun: 'she's still chasing it', 'he said Thursday', 'they've gone quiet again'.",
+      "examples": [
+        "Marcus: Still nothing. I chased them again Friday.",
+        "Bob: Yeah, that's slipping again.",
+        "Alice: Is she still on it, or did that move to Danny?",
+        "Sarah: It's the same six we talked about, I think. Maybe five now.",
+        "Priya: Did that ever get a ticket, or are we still just saying it in here?",
+        "Tomas: They asked again. Third time now.",
+        "Danny: I reran it after what he changed and it still fails."
+      ],
+      "ratio_by_meeting_type": {
+        "standup": "HIGHEST. Roughly one turn in three contains a reference that only resolves from earlier context. Everyone in the room shares the context and nobody bothers restating it.",
+        "project_review": "MIDDLE. Roughly one turn in five. Deeper discussion needs more things named explicitly, and occasional attendees need orienting.",
+        "all_hands": "LOWEST. Roughly one turn in eight. The audience is wider, so speakers recap and name things in full. This is where anchored, quotable statements concentrate."
+      },
+      "balance": "Each meeting still needs enough anchored statements (with real names, dates and numbers) to be answerable on its own — aim for anchors early in a topic and references afterwards."
+    }
+  },
+  "thin_meetings": {
+    "what": "Slots with \"thin\": true have zero or one beats. They are marked thin deliberately.",
+    "why": "Retrieval difficulty. If every meeting is equally identifiable as being about a named thread, there are no hard negatives. A meeting that touches a thread without deciding anything is exactly the plausible-but-wrong chunk that retrieval must learn to rank below the one that matters.",
+    "content": [
+      "Status repeats with no movement: 'same as last week', 'still waiting', 'no change'",
+      "Scheduling chatter: who is out, moving a meeting, a calendar clash, someone joining late",
+      "Tangents that go nowhere: a conference, a customer anecdote unrelated to anything, an office logistics complaint",
+      "Half-hearted attempts to revisit a topic that get parked again",
+      "Named threads ARE mentioned, but only in passing and without resolution"
+    ],
+    "do_not": "Do not invent new plot in a thin meeting. No decisions, no new blockers, no dates committed. It must genuinely be a low-signal meeting."
+  },
+  "inconsistent_fact_protocol": {
+    "why": "The four inconsistent facts are corpus noise by design, but a turn that states one of them must never become a golden question: the same question would have several disagreeing answer turns and correct retrieval would score as a miss.",
+    "how": "When a generated turn states one of the inconsistent facts (a specific number of audit findings, a Ridgeline contract value, a claim about which launch date was originally agreed, or a count of DataCorp follow-ups), the generator records that turn id in data/inconsistent_turns.json. scripts/build_golden_set.py excludes those turn ids from question generation.",
+    "scope": "Only turns that actually state the disputed value. A turn that mentions the audit without giving a number is not an inconsistent turn."
+  },
+  "meeting_types": {
+    "standup": {
+      "cadence": "Weekly, Mondays",
+      "turns": "30-42",
+      "character": "Fast status round, blockers, occasional decision. Frequently repeats last week's blockers with no movement."
+    },
+    "project_review": {
+      "cadence": "Biweekly, Thursdays",
+      "turns": "34-46",
+      "character": "Deeper on one project. Scope arguments, estimates, descoping. Where the uncomfortable decisions get made."
+    },
+    "all_hands": {
+      "cadence": "Monthly, last Friday",
+      "turns": "36-48",
+      "character": "Rounded-up numbers, prepared updates, a Q&A section where someone asks the question nobody wanted asked. Raj asks one sharp question and leaves."
+    }
+  },
+  "timeline": [
+    {
+      "id": "2025-03-03_standup",
+      "date": "2025-03-03",
+      "weekday": "Monday",
+      "type": "standup",
+      "title": "Weekly standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Sarah",
+        "Marcus"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date"
+      ],
+      "beats": [
+        "The board wants a committed Orion date this week",
+        "D1 arrived at through argument: staged rollout, beta cohort then public the following week",
+        "Bob wants two more sprints for the auth flow and does not get them"
+      ]
+    },
+    {
+      "id": "2025-03-10_standup",
+      "date": "2025-03-10",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Tomas"
+      ],
+      "thin": false,
+      "threads": [
+        "datacorp_contract",
+        "launch_date"
+      ],
+      "beats": [
+        "DataCorp renewal notice arrives with new terms",
+        "Marcus flags the current agreement does not cover production API keys",
+        "Tomas mentions enterprise interest for the first time, and it is ignored"
+      ]
+    },
+    {
+      "id": "2025-03-13_orion_review",
+      "date": "2025-03-13",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Orion review",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Sarah",
+        "Danny"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date",
+        "datacorp_contract"
+      ],
+      "beats": [
+        "First real scoping of Orion",
+        "The auth flow argument resurfaces and is not settled",
+        "No decision reached, which Alice notes with irritation"
+      ]
+    },
+    {
+      "id": "2025-03-17_standup",
+      "date": "2025-03-17",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Marcus",
+        "Elena"
+      ],
+      "thin": true,
+      "threads": [
+        "atlas_scope",
+        "datacorp_contract"
+      ],
+      "beats": []
+    },
+    {
+      "id": "2025-03-24_standup",
+      "date": "2025-03-24",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Sarah",
+        "Marcus"
+      ],
+      "thin": true,
+      "threads": [
+        "accessibility_audit",
+        "datacorp_contract"
+      ],
+      "beats": [
+        "Sarah asks who owns the accessibility audit on the checkout flow; nobody does, and it gets parked rather than answered"
+      ]
+    },
+    {
+      "id": "2025-03-27_atlas_review",
+      "date": "2025-03-27",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Atlas review",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Elena",
+        "Marcus"
+      ],
+      "thin": false,
+      "threads": [
+        "atlas_scope"
+      ],
+      "beats": [
+        "Legacy billing vendor terms reviewed",
+        "Atlas scoped at one quarter on optimistic assumptions",
+        "Proration is mentioned and nobody yet understands what it implies"
+      ]
+    },
+    {
+      "id": "2025-03-28_allhands",
+      "date": "2025-03-28",
+      "weekday": "Friday",
+      "type": "all_hands",
+      "title": "March all-hands",
+      "attendees": [
+        "Alice",
+        "Raj",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Elena",
+        "Tomas",
+        "Danny"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date",
+        "atlas_scope"
+      ],
+      "beats": [
+        "Rounded numbers presented as progress",
+        "Raj asks why the launch date keeps being described as 'roughly'",
+        "Someone asks about headcount and gets a non-answer"
+      ]
+    },
+    {
+      "id": "2025-03-31_standup",
+      "date": "2025-03-31",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Nina"
+      ],
+      "thin": false,
+      "threads": [
+        "rate_limits",
+        "accessibility_audit"
+      ],
+      "beats": [
+        "Bob's load simulation triggers rate limit alerts at projected launch volume",
+        "Nina joins and immediately flags an instrumentation gap",
+        "The audit is still unowned a week later"
+      ]
+    },
+    {
+      "id": "2025-04-07_standup",
+      "date": "2025-04-07",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Priya",
+        "Elena"
+      ],
+      "thin": false,
+      "threads": [
+        "budget_approval",
+        "accessibility_audit",
+        "rate_limits"
+      ],
+      "beats": [
+        "Alice requests launch support budget for campaign spend and cloud capacity",
+        "Priya joins as engineering manager and is visibly unimpressed by the status format",
+        "The audit is finally commissioned"
+      ]
+    },
+    {
+      "id": "2025-04-10_orion_review",
+      "date": "2025-04-10",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Orion review",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Marcus",
+        "Priya",
+        "Danny"
+      ],
+      "thin": false,
+      "threads": [
+        "datacorp_contract",
+        "rate_limits"
+      ],
+      "beats": [
+        "D3 arrived at after argument: integrate with DataCorp, do not build our own",
+        "Marcus advises against it and is overruled",
+        "Bob estimates the in-house alternative at six weeks and is told it is out of scope"
+      ]
+    },
+    {
+      "id": "2025-04-24_atlas_review",
+      "date": "2025-04-24",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Atlas review",
+      "attendees": [
+        "Alice",
+        "Priya",
+        "Elena",
+        "Bob"
+      ],
+      "thin": false,
+      "threads": [
+        "atlas_scope",
+        "hiring_freeze"
+      ],
+      "beats": [
+        "The Atlas estimate doubles once proration and tax handling are understood",
+        "Priya opens a req for a second backend engineer",
+        "Elena cannot say whether the req is funded"
+      ]
+    },
+    {
+      "id": "2025-04-25_allhands",
+      "date": "2025-04-25",
+      "weekday": "Friday",
+      "type": "all_hands",
+      "title": "April all-hands",
+      "attendees": [
+        "Alice",
+        "Raj",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Elena",
+        "Tomas",
+        "Nina",
+        "Danny",
+        "Priya"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date",
+        "datacorp_contract",
+        "budget_approval"
+      ],
+      "beats": [
+        "Launch presented as on track, which nobody in the room believes",
+        "Raj asks what would have to be true for May 1 to hold",
+        "Elena gives the first public non-answer on budget"
+      ]
+    },
+    {
+      "id": "2025-05-08_orion_review",
+      "date": "2025-05-08",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Orion review",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Sarah",
+        "Priya",
+        "Danny",
+        "Marcus"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date",
+        "accessibility_audit",
+        "datacorp_contract"
+      ],
+      "beats": [
+        "The internal-only release is planned in detail",
+        "The audit vendor reschedules a third time",
+        "Danny raises flaky integration tests and is talked over"
+      ]
+    },
+    {
+      "id": "2025-05-12_standup",
+      "date": "2025-05-12",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Marcus",
+        "Priya"
+      ],
+      "thin": false,
+      "threads": [
+        "datacorp_contract",
+        "hiring_freeze"
+      ],
+      "beats": [
+        "DataCorp change counsel and demand a 30% uplift",
+        "D3 reversed: Bob builds the in-house fallback after all",
+        "Marcus points out, without satisfaction, that he advised against the original decision",
+        "F4 INCONSISTENT FACT: Marcus says four follow-ups, maybe five"
+      ]
+    },
+    {
+      "id": "2025-05-19_standup",
+      "date": "2025-05-19",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Sarah",
+        "Danny",
+        "Marcus",
+        "Elena"
+      ],
+      "thin": false,
+      "threads": [
+        "accessibility_audit",
+        "budget_approval"
+      ],
+      "beats": [
+        "The audit findings land. F1 INCONSISTENT FACT: Sarah says 41 issues, 6 of them blocking",
+        "D5 emerges sideways: Sarah ends up owning remediation sign-off without ever agreeing to it",
+        "Partial budget approval comes through for cloud capacity only"
+      ]
+    },
+    {
+      "id": "2025-05-22_atlas_review",
+      "date": "2025-05-22",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Atlas review",
+      "attendees": [
+        "Alice",
+        "Priya",
+        "Elena",
+        "Bob"
+      ],
+      "thin": false,
+      "threads": [
+        "atlas_scope"
+      ],
+      "beats": [
+        "Atlas descoped to phase 1",
+        "Dunning and proration deferred",
+        "Priya says plainly that deferred means cancelled and nobody contradicts her"
+      ]
+    },
+    {
+      "id": "2025-05-26_standup",
+      "date": "2025-05-26",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Sarah",
+        "Danny",
+        "Tomas"
+      ],
+      "thin": true,
+      "threads": [
+        "accessibility_audit",
+        "ridgeline"
+      ],
+      "beats": [
+        "F1 INCONSISTENT FACT: Danny says 38 after merging the duplicates, contradicting Sarah's 41 from last week, and nobody reconciles the two numbers"
+      ]
+    },
+    {
+      "id": "2025-05-30_allhands",
+      "date": "2025-05-30",
+      "weekday": "Friday",
+      "type": "all_hands",
+      "title": "May all-hands",
+      "attendees": [
+        "Alice",
+        "Raj",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Elena",
+        "Tomas",
+        "Nina",
+        "Danny",
+        "Priya"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date",
+        "accessibility_audit",
+        "ridgeline"
+      ],
+      "beats": [
+        "The internal-only release is framed as a deliberate strategy rather than a fallback",
+        "Raj asks who decided that and when",
+        "Tomas presents Ridgeline as the reference account"
+      ]
+    },
+    {
+      "id": "2025-06-02_standup",
+      "date": "2025-06-02",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Priya",
+        "Elena",
+        "Nina",
+        "Tomas"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date",
+        "ridgeline",
+        "budget_approval"
+      ],
+      "beats": [
+        "D1 reversed: full public availability on day one, no phased invites, because the internal release showed phased invites cut activation almost in half",
+        "Bob objects that this is the exact traffic pattern he warned about in March",
+        "D2 amended: public launch set for June 9",
+        "F2 INCONSISTENT FACT: Elena says Ridgeline is 210k after the discount",
+        "Nina proposes the telemetry rebuild and gets a lukewarm response"
+      ]
+    },
+    {
+      "id": "2025-06-05_orion_review",
+      "date": "2025-06-05",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Orion review",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Priya",
+        "Marcus",
+        "Tomas",
+        "Sarah"
+      ],
+      "thin": false,
+      "threads": [
+        "ridgeline",
+        "datacorp_contract",
+        "accessibility_audit"
+      ],
+      "beats": [
+        "Ridgeline require SAML SSO that everyone assumed already existed",
+        "F4 INCONSISTENT FACT: Marcus says he has genuinely lost count of the DataCorp follow-ups",
+        "Audit remediation is competing with launch work for the same people"
+      ]
+    },
+    {
+      "id": "2025-06-09_standup",
+      "date": "2025-06-09",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Danny",
+        "Priya"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date",
+        "accessibility_audit"
+      ],
+      "beats": [
+        "D2 amended again: launch slips to June 23, and Alice acknowledges out loud that this is the third date",
+        "F3 INCONSISTENT FACT: Bob says we said the 28th originally, Alice says it was always May 1, and the disagreement is dropped rather than settled",
+        "D5 amended: sign-off split three ways between Sarah, Danny and Marcus because one owner could not carry three kinds of authority"
+      ]
+    },
+    {
+      "id": "2025-06-16_standup",
+      "date": "2025-06-16",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Priya",
+        "Nina",
+        "Elena"
+      ],
+      "thin": false,
+      "threads": [
+        "rate_limits",
+        "budget_approval",
+        "hiring_freeze"
+      ],
+      "beats": [
+        "The reporting endpoint melted for 40 minutes on Friday during launch week prep",
+        "Nobody can say how many tenants were affected, which lands badly",
+        "A company-wide spend freeze arrives the same morning",
+        "The preferred backend candidate declines after six weeks of silence"
+      ]
+    },
+    {
+      "id": "2025-06-19_atlas_review",
+      "date": "2025-06-19",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Atlas review",
+      "attendees": [
+        "Alice",
+        "Priya",
+        "Elena",
+        "Bob"
+      ],
+      "thin": false,
+      "threads": [
+        "atlas_scope",
+        "hiring_freeze"
+      ],
+      "beats": [
+        "An engineer is pulled off Atlas onto Orion stabilisation",
+        "Atlas slips again",
+        "Priya escalates capacity openly and is not backed up"
+      ]
+    },
+    {
+      "id": "2025-06-23_standup",
+      "date": "2025-06-23",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Priya",
+        "Danny"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date",
+        "rate_limits"
+      ],
+      "beats": [
+        "Orion launches publicly today",
+        "Hard rate limit safeguards were added over the weekend under time pressure",
+        "Muted relief rather than celebration; Danny is still finding defects"
+      ]
+    },
+    {
+      "id": "2025-06-27_allhands",
+      "date": "2025-06-27",
+      "weekday": "Friday",
+      "type": "all_hands",
+      "title": "June all-hands",
+      "attendees": [
+        "Alice",
+        "Raj",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Elena",
+        "Tomas",
+        "Nina",
+        "Danny",
+        "Priya"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date",
+        "accessibility_audit",
+        "ridgeline",
+        "rate_limits"
+      ],
+      "beats": [
+        "The launch is celebrated",
+        "F1 INCONSISTENT FACT: Alice says about forty findings",
+        "The Ridgeline security questionnaire has stalled for three weeks",
+        "Raj asks what broke on the 16th and gets an incomplete answer"
+      ]
+    },
+    {
+      "id": "2025-06-30_standup",
+      "date": "2025-06-30",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Priya",
+        "Elena",
+        "Nina"
+      ],
+      "thin": true,
+      "threads": [
+        "hiring_freeze",
+        "budget_approval"
+      ],
+      "beats": [
+        "D4 slips out almost as an aside: the telemetry rebuild is deprioritised for Q3, and Nina says nothing"
+      ]
+    },
+    {
+      "id": "2025-07-03_orion_review",
+      "date": "2025-07-03",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Orion post-launch review",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Priya",
+        "Danny",
+        "Tomas",
+        "Sarah"
+      ],
+      "thin": false,
+      "threads": [
+        "ridgeline",
+        "rate_limits",
+        "accessibility_audit"
+      ],
+      "beats": [
+        "Tomas reports Ridgeline are reconsidering",
+        "Post-launch defect triage, longer than anyone budgeted for",
+        "Remediation sprints planned around stabilisation work"
+      ]
+    },
+    {
+      "id": "2025-07-07_standup",
+      "date": "2025-07-07",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Priya",
+        "Nina",
+        "Elena"
+      ],
+      "thin": false,
+      "threads": [
+        "rate_limits",
+        "budget_approval"
+      ],
+      "beats": [
+        "At the incident post-mortem nobody can answer how many tenants were affected on June 16",
+        "D4 reversed one week after it was made: the telemetry rebuild is back on, and Nina is visibly restrained about it",
+        "Hard per-tenant limits and autoscaling ship, closing the rate limits thread"
+      ]
+    },
+    {
+      "id": "2025-07-14_standup",
+      "date": "2025-07-14",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Marcus",
+        "Bob",
+        "Tomas"
+      ],
+      "thin": false,
+      "threads": [
+        "datacorp_contract",
+        "ridgeline"
+      ],
+      "beats": [
+        "A reduced DataCorp contract is signed covering the reporting feed only, not the production keys",
+        "Marcus is unsentimental about a thing he chased for four months",
+        "SSO work for Ridgeline is underway"
+      ]
+    },
+    {
+      "id": "2025-07-17_ridgeline_review",
+      "date": "2025-07-17",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Ridgeline onboarding review",
+      "attendees": [
+        "Alice",
+        "Tomas",
+        "Priya",
+        "Bob",
+        "Marcus"
+      ],
+      "thin": false,
+      "threads": [
+        "ridgeline"
+      ],
+      "beats": [
+        "SSO is delivered as a one-off integration, which Priya objects to on maintenance grounds",
+        "Custom plan terms agreed",
+        "Tomas quotes the customer verbatim to win the argument"
+      ]
+    },
+    {
+      "id": "2025-07-21_standup",
+      "date": "2025-07-21",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Tomas",
+        "Sarah",
+        "Danny",
+        "Priya"
+      ],
+      "thin": false,
+      "threads": [
+        "ridgeline",
+        "accessibility_audit"
+      ],
+      "beats": [
+        "Ridgeline go live on the custom plan",
+        "Remediation sprint progress, two blocking issues left",
+        "The contractor is extended for the first time"
+      ]
+    },
+    {
+      "id": "2025-07-25_allhands",
+      "date": "2025-07-25",
+      "weekday": "Friday",
+      "type": "all_hands",
+      "title": "July all-hands",
+      "attendees": [
+        "Alice",
+        "Raj",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Elena",
+        "Tomas",
+        "Nina",
+        "Danny",
+        "Priya"
+      ],
+      "thin": false,
+      "threads": [
+        "ridgeline",
+        "budget_approval",
+        "atlas_scope"
+      ],
+      "beats": [
+        "F2 INCONSISTENT FACT: Raj describes Ridgeline as a quarter of a million",
+        "The budget request is rolled into H2 planning rather than approved or refused",
+        "Someone asks whether the req is ever coming back and does not get an answer"
+      ]
+    },
+    {
+      "id": "2025-07-28_standup",
+      "date": "2025-07-28",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Sarah",
+        "Danny",
+        "Priya"
+      ],
+      "thin": true,
+      "threads": [
+        "accessibility_audit",
+        "atlas_scope"
+      ],
+      "beats": []
+    },
+    {
+      "id": "2025-07-31_atlas_review",
+      "date": "2025-07-31",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Atlas review",
+      "attendees": [
+        "Alice",
+        "Priya",
+        "Elena",
+        "Bob"
+      ],
+      "thin": false,
+      "threads": [
+        "atlas_scope"
+      ],
+      "beats": [
+        "Atlas descoped a second time",
+        "Phase 2 formally deferred to Q4 with no owner and no date",
+        "Everyone present understands what that means and nobody says it out loud"
+      ]
+    },
+    {
+      "id": "2025-08-04_standup",
+      "date": "2025-08-04",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Sarah",
+        "Danny",
+        "Priya",
+        "Elena"
+      ],
+      "thin": true,
+      "threads": [
+        "accessibility_audit",
+        "hiring_freeze"
+      ],
+      "beats": []
+    },
+    {
+      "id": "2025-08-11_standup",
+      "date": "2025-08-11",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Sarah",
+        "Danny",
+        "Marcus"
+      ],
+      "thin": false,
+      "threads": [
+        "accessibility_audit"
+      ],
+      "beats": [
+        "Marcus signs off conformance; the last blocking issues are closed",
+        "F1 INCONSISTENT FACT: Marcus refers to the 38 findings, contradicting the 41 still in circulation",
+        "Sarah is more relieved than she expected to be"
+      ]
+    },
+    {
+      "id": "2025-08-14_orion_review",
+      "date": "2025-08-14",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Orion retrospective",
+      "attendees": [
+        "Alice",
+        "Bob",
+        "Priya",
+        "Nina",
+        "Marcus",
+        "Danny"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date",
+        "rate_limits",
+        "datacorp_contract"
+      ],
+      "beats": [
+        "An honest retrospective on the three launch dates",
+        "Open disagreement about whether the DataCorp reversal was made too late",
+        "Nina finally has data, and it contradicts an assumption everyone made in March"
+      ]
+    },
+    {
+      "id": "2025-08-18_standup",
+      "date": "2025-08-18",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Priya",
+        "Elena",
+        "Bob"
+      ],
+      "thin": true,
+      "threads": [
+        "atlas_scope",
+        "budget_approval"
+      ],
+      "beats": []
+    },
+    {
+      "id": "2025-08-25_standup",
+      "date": "2025-08-25",
+      "weekday": "Monday",
+      "type": "standup",
+      "attendees": [
+        "Alice",
+        "Priya",
+        "Elena",
+        "Bob"
+      ],
+      "thin": true,
+      "threads": [
+        "atlas_scope",
+        "hiring_freeze"
+      ],
+      "beats": [
+        "The Atlas phase 1 ship plan is confirmed for Thursday, almost in passing"
+      ]
+    },
+    {
+      "id": "2025-08-28_atlas_review",
+      "date": "2025-08-28",
+      "weekday": "Thursday",
+      "type": "project_review",
+      "title": "Atlas review",
+      "attendees": [
+        "Alice",
+        "Priya",
+        "Elena",
+        "Bob"
+      ],
+      "thin": false,
+      "threads": [
+        "atlas_scope"
+      ],
+      "beats": [
+        "Atlas phase 1 ships",
+        "Phase 2 is not mentioned by anyone",
+        "Priya asks one pointed question about it and gets no answer"
+      ]
+    },
+    {
+      "id": "2025-08-29_allhands",
+      "date": "2025-08-29",
+      "weekday": "Friday",
+      "type": "all_hands",
+      "title": "August all-hands",
+      "attendees": [
+        "Alice",
+        "Raj",
+        "Bob",
+        "Sarah",
+        "Marcus",
+        "Elena",
+        "Tomas",
+        "Nina",
+        "Danny",
+        "Priya"
+      ],
+      "thin": false,
+      "threads": [
+        "launch_date",
+        "atlas_scope",
+        "budget_approval",
+        "hiring_freeze"
+      ],
+      "beats": [
+        "A six-month wrap-up that rounds everything up",
+        "Raj asks what we would do differently and gets exactly one honest answer",
+        "Three threads end unresolved and the framing pretends otherwise"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+1. Alice: I finally got my bike back from the shop, thanks for asking, and we need to sort that migration today.
+2. Priya: ATL-88 is still open, who's blocked on that?
+3. Bob: honestly, the proration work blew up the numbers.
+4. Alice: The estimate we had on March 27 was X, now it’s basically double after we understood tax handling.
+5. Elena: I can't commit a number today on the funding for the hire.
+6. Priya: That's two sprints, not one, and I need an owner for the migration.
+7. Bob: hang on— the backend load we saw on Tuesday at 5k rps is already hitting our limits.
+8. Priya: So the migration is still at risk, right?
+9. Bob: —if we toggle the feature flag we could defer the tax calc to post‑launch.
+10. Alice: let's park that flag discussion, we need a concrete plan for the migration.
+11. Priya: I’m opening a req for a second backend engineer right now.
+12. Bob: I'm not blocked, the data team is waiting on the tax schema.
+13. Elena: The finance queue is still reconciling the Q1 numbers, so I don’t have a budget line to confirm.
+14. Alice: I don’t want to guess today on whether

@@ -1,0 +1,35 @@
+1. Alice: Hey everyone, quick coffee before we dive, I saw a squirrel outside the lobby again.
+2. Bob: Yeah, same as last week, that squirrel.
+3. Marcus: Still nothing on the contract from the vendor, I chased them on Tuesday.
+4. Elena: I’m still reconciling the Q1 numbers, can’t give a figure today.
+5. Alice: Okay, status round—Orion UI tweaks, anyone got new updates?
+6. Bob: Feature flag again, could gate the new dashboard, honestly.
+7. Bob: —the flag would let us roll back quick.
+8. Marcus: I’d want that in writing before we flip anything.
+9. Elena: The finance queue is backed up, so I can’t approve any extra spend until next Friday.
+10. Alice: Did we get any word on the billing migration, the Atlas thing?
+11. Bob: Same as Monday, still waiting on the schema changes, maybe ATL‑88.
+12. Bob: Hang on—those tables need a migration script, I think two more sprints, realistically.
+13. Marcus: That would be about ten business days from now, give or take.
+14. Elena: I can’t commit a number today, the approvals are still in the pipeline.
+15. Alice: And the DataCorp renewal, any movement on that?
+16. Marcus: The contract still lacks production API key language, I flagged it on Thursday.
+17. Marcus: I can’t say we’ll have it signed by Friday.
+18. Bob: Feature flag again, maybe we just toggle the API usage.
+19. Bob: —if the vendor signs we could enable it.
+20. Alice: I don’t want to guess today, but we need an owner for that flag.
+21. Elena: I’ll look at the budget impact after the audit thing, but that’s later.
+22. Alice: Who’s taking the lead on the Atlas migration?
+23. Bob: I can probably draft the migration plan by next Wednesday.
+24. Bob: —I’ll push a PR for the schema changes.
+25. Marcus: I’d want that in writing, plus a risk assessment.
+26. Elena: Still nothing on the approval queue for that risk doc.
+27. Alice: Anything else on Orion launch week concerns?
+28. Bob: Honestly, the launch week will be rough if we’re still toggling core flows.
+29. Marcus: I can’t commit to a date until legal signs off on the vendor side.
+30. Elena: The finance calendar shows the next review on the 28th, but I’m not sure we’ll be cleared.
+31. Alice: So we have a flag for the widget, a draft migration plan, and I’ll leave it with me to get the final sign‑off on the 28th.
+32. Bob: Same as before, the flag could be a stop‑gap.
+33. Bob: Feature flag again, I’ll set up a toggle on Thursday.
+34. Marcus: I’ll follow up with the vendor on Tuesday, see if they can add the key clause.
+35. Elena: I’ll double‑check the Q1 reconciliation after the weekend, maybe have something by next Monday.

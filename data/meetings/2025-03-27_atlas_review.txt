@@ -1,0 +1,46 @@
+1. Alice: Hey folks, quick personal note—my daughter’s recital is Thursday, so I’m juggling that and want a clear owner for the billing migration by Friday.
+2. Bob: Yeah, the migration—honestly, the legacy vendor terms look like we’re stuck with a 12‑month notice that we missed on the 17th.
+3. Elena: I’m still reconciling the Q1 numbers, but I can’t commit a figure for the proration impact yet.
+4. Marcus: I'd want that in writing before we sign anything, and I need to count the business days from the notice to the effective date.
+5. Bob: Two more sprints, realistically, for the flag rollout on that—feature flag on Thursday—
+6. Alice: —so let’s park that for now, we’ll circle back after we know the legal sign‑off.
+7. Elena: The same thing we talked about last week, the approval queue is still at step three, so nothing concrete.
+8. Bob: Wait, what?—the flag toggles are in ATL‑88, I think.
+9. Marcus: I’ll follow up with the vendor on Tuesday, but I can’t promise a date for the contract amendment.
+10. Alice: Did we ever assign an owner for the proration calculation?
+11. Bob: Not yet, but the billing work could use a feature flag, and I can probably get that done by next Thursday.
+12. Elena: I can look at the proration model after the audit thing, maybe by the 28th.
+13. Marcus: Still nothing on the amendment, I chased them again Friday.
+14. Alice: Okay, so we’re agreeing that Bob will prototype the flag for ATL‑88, and Elena will draft the proration impact after the audit.
+15. Bob: I’ll set up the toggle on Thursday—
+16. Alice: —and I’ll put that in the sprint plan, but I don’t want to guess today on the final scope.
+17. Elena: The same thing, the quarter‑end reconciliation will push any final numbers into the next week.
+18. Marcus: I need that in writing, so I’ll send a request by end of day Monday.
+19. Bob: Honestly, if we wait on the vendor, the migration could slip another two weeks.
+20. Alice: So we’re okay with a one‑quarter optimistic assumption for the migration, right?
+21. Elena: I can’t confirm the budget impact, but the optimistic view is a 25% effort increase.
+22. Bob: Feature flags are the answer to most of this, I’ll add a toggle for the billing API in ORI‑412.
+23. Marcus: I’ll double‑check the legal checklist after the meeting.
+24. Alice: Did anyone see the latest email from the legacy vendor about the notice period?
+25. Bob: I skimmed it, says we have 30 days from the 17th, so that’s end of April.
+26. Elena: That aligns with the proration window we discussed, but I still don’t have the exact figure.
+27. Marcus: I’ll need a formal amendment, so I can’t commit to a timeline until I get that.
+28. Alice: Let’s park the amendment discussion, we’ll revisit after we hear back from the vendor.
+29. Bob: Feature flag again, I’ll set up a toggle on Thursday—
+30. Elena: Still nothing on the proration number, I’ll chase it after the audit.
+31. Marcus: I’m still waiting on the vendor response, I’ll ping them again Monday.
+32. Alice: Okay, so Bob owns the flag for ATL‑88, Elena owns the proration draft, and Marcus owns the amendment request.
+33. Bob: Yeah, that works, I’ll have the toggle ready by Thursday.
+34. Elena: I’ll aim for the 28th on the proration doc.
+35. Marcus: I’ll send the written request by Monday, then we’ll see.
+36. Alice: Good, I’ll note those owners and dates, and we’ll circle back next Thursday.
+37. Bob: Still nothing on the launch week impact, but I think we’re okay.
+38. Elena: I can’t commit a number today, but I’ll update the Q1 forecast after the proration is in.
+39. Marcus: I can’t commit to a timeline on the amendment, but I’ll have a draft by Friday.
+40. Alice: Let’s park any further debate on the migration scope until we have those three pieces.
+41. Bob: Yeah.
+42. Elena: Same as Monday.
+43. Marcus: Still nothing.
+44. Alice: All right, moving on.
+45. Bob: —
+46. Alice: —Okay, that’s it.

@@ -1,0 +1,42 @@
+1. Alice: Hey all, quick coffee before we jump—
+2. Bob: —yeah, got that, thanks.
+3. Sarah: I’m still polishing the onboarding flow mock for ORI-412.
+4. Marcus: The DataCorp thing landed in my inbox Friday, and it’s missing the production API clause.
+5. Tomas: So I heard from the finance side that Acme are asking again about the reporting dashboard.
+6. Alice: Hold on, Tomas, we’re not on that yet, let’s park it.
+7. Bob: Honestly, the flag system could hide the missing piece if we toggle it on Friday.
+8. Sarah: I don’t want to overpromise on timing, but the accessibility note we added last week is still pending.
+9. Marcus: I’d want that in writing before we flip any flags.
+10. Alice: Who can own the vendor situation and get a revised addendum by next Thursday?
+11. Bob: I can probably get a draft to legal by Thursday morning.
+12. Sarah: That works as long as the design hand‑off on Tuesday isn’t delayed.
+13. Tomas: And just so you know, the enterprise team at CloudPeak asked if we can show the new report on the 28th.
+14. Alice: I’m hearing two different dates—Thursday for the addendum, 28th for the go‑live. Which wins?
+15. Bob: Two more sprints, realistically, and we’ll be fine for the 28th.
+16. Marcus: I can’t commit to that timeline until the contract language is signed, which is another two business days after I receive the revised terms.
+17. Alice: So we’re looking at a Friday sign‑off at the earliest—
+18. Bob: —and then we push the feature flag Friday night.
+19. Sarah: The same thing we tried on the beta last week, right?
+20. Marcus: I’ll draft the amendment today and send it to you, Alice, by end of day.
+21. Alice: Thanks. Let’s circle back on that after the draft lands.
+22. Bob: Hang on—what’s the status on the auth flow ticket ATL-88?
+23. Sarah: Still nothing, the devs are tied up with the data export fix.
+24. Tomas: Meanwhile, the CloudPeak folks are pressing for a demo next Monday.
+25. Alice: I don’t want to guess today, so we’ll need a firm owner for that demo.
+26. Bob: I’ll talk to the release engineer after lunch and see if we can slot a quick demo on Monday morning.
+27. Marcus: I’ll need a written request from the sales lead before I can sign off any demo content.
+28. Sarah: That’s fine, I’ll add a note to the prototype repo linking to the demo specs.
+29. Alice: Okay, so Bob checks the release schedule, Marcus gets the written request, Sarah updates the repo. Anything else?
+30. Tomas: Oh, and the DataCorp renewal notice—do we have a response deadline?
+31. Marcus: The vendor situation needs a reply by next Wednesday, otherwise they’ll auto‑renew on the 15th.
+32. Bob: Yeah, that’s slipping again.
+33. Alice: I’ll ping the account manager today and ask for a revised clause, then we can feed that to you, Marcus.
+34. Sarah: I’ll make sure the compliance checklist includes that clause before we hand anything off.
+35. Tomas: I’ll note the CloudPeak demo on the shared calendar for Monday, just in case.
+36. Bob: Still nothing on the rate‑limit question from last week—
+37. Alice: Not relevant now, let’s keep focus on the addendum and the demo.
+38. Marcus: I’ll have the legal memo to you, Alice, by end of day Thursday.
+39. Sarah: Same as Monday, the prototype notes are in the folder.
+40. Bob: I’ll push the flag on Friday night as we discussed.
+41. Alice: Good. If anything changes before Thursday, drop me a Slack.
+42. Tomas: Got it.

@@ -21,6 +21,11 @@ MIN_API_GAP_SECONDS = 1.5
 # gpt-oss models spend tokens on an internal reasoning channel before emitting
 # content. At 2048 the larger extraction batches ran out mid-reasoning and came
 # back with empty content, which Groq then rejected as invalid JSON.
+#
+# Do not raise this casually. Groq charges a request against the tokens-per-
+# minute allowance as prompt + max_tokens, not prompt + actual completion, so
+# this value is spent on every call whether or not the model uses it. Callers
+# that need a different ceiling pass max_tokens to complete() instead.
 MAX_TOKENS = 4096
 _CACHE_PATH = Path(__file__).resolve().parents[1] / "data" / "llm_cache.json"
 
@@ -58,13 +63,37 @@ def complete(
     prompt: str,
     system: str | None = None,
     json_mode: bool = False,
+    model: str | None = None,
+    max_tokens: int | None = None,
+    reasoning_effort: str | None = None,
 ) -> str:
-    """Complete a prompt, using disk cache and rate limiting."""
-    cache_key = _make_cache_key(MODEL, system, prompt, json_mode)
+    """Complete a prompt, using disk cache and rate limiting.
+
+    `model` overrides MODEL for this call only. The cache key already includes
+    the model, so responses from different models never collide. This exists so
+    a caller can pick a model in code rather than through the environment; see
+    scripts/generate_corpus.py.
+
+    `max_tokens` overrides MAX_TOKENS for this call. It matters more than it
+    looks: Groq bills a request against the tokens-per-minute limit as prompt
+    plus max_tokens, not prompt plus what the model actually returns. A large
+    reservation therefore fails as a hard 413 on a small TPM allowance even
+    when the prompt is modest. It is deliberately not part of the cache key,
+    being a cap on the response rather than an input to it.
+
+    `reasoning_effort` ("low"/"medium"/"high") controls how much gpt-oss spends
+    on its reasoning channel before answering. Unlike max_tokens it changes the
+    response, so it IS part of the cache key. Callers that leave it unset keep
+    their existing cache entries.
+    """
+    model = model or MODEL
+    cache_key = _make_cache_key(model, system, prompt, json_mode, reasoning_effort)
     if cache_key in _cache:
         return _cache[cache_key]
 
-    text = _call_api_with_retries(prompt, system, json_mode)
+    text = _call_api_with_retries(
+        prompt, system, json_mode, model, max_tokens, reasoning_effort
+    )
     if json_mode:
         text = _strip_markdown_fences(text)
         try:
@@ -89,17 +118,19 @@ def _make_cache_key(
     system: str | None,
     prompt: str,
     json_mode: bool,
+    reasoning_effort: str | None = None,
 ) -> str:
-    payload = json.dumps(
-        {
-            "model": model,
-            "system": system,
-            "prompt": prompt,
-            "json_mode": json_mode,
-        },
-        ensure_ascii=False,
-        sort_keys=True,
-    )
+    payload_dict = {
+        "model": model,
+        "system": system,
+        "prompt": prompt,
+        "json_mode": json_mode,
+    }
+    # Only added when set, so callers that never pass it keep their existing
+    # cache entries rather than having the whole cache invalidated.
+    if reasoning_effort is not None:
+        payload_dict["reasoning_effort"] = reasoning_effort
+    payload = json.dumps(payload_dict, ensure_ascii=False, sort_keys=True)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
@@ -195,6 +226,9 @@ def _raw_generate(
     prompt: str,
     system: str | None,
     json_mode: bool,
+    model: str,
+    max_tokens: int | None = None,
+    reasoning_effort: str | None = None,
     use_response_format: bool = True,
 ) -> str:
     global _call_count, _last_call_time
@@ -212,12 +246,14 @@ def _raw_generate(
         messages.append({"role": "user", "content": prompt})
 
     kwargs: dict = {
-        "model": MODEL,
+        "model": model,
         "messages": messages,
-        "max_tokens": MAX_TOKENS,
+        "max_tokens": max_tokens or MAX_TOKENS,
     }
     if json_mode and use_response_format:
         kwargs["response_format"] = {"type": "json_object"}
+    if reasoning_effort is not None:
+        kwargs["reasoning_effort"] = reasoning_effort
 
     _wait_for_rate_limit()
     _last_call_time = time.monotonic()
@@ -240,7 +276,14 @@ def _raw_generate(
     return text
 
 
-def _call_api_with_retries(prompt: str, system: str | None, json_mode: bool) -> str:
+def _call_api_with_retries(
+    prompt: str,
+    system: str | None,
+    json_mode: bool,
+    model: str,
+    max_tokens: int | None = None,
+    reasoning_effort: str | None = None,
+) -> str:
     keys_tried = 0
     other_retries = 0
     last_exc: BaseException | None = None
@@ -248,7 +291,15 @@ def _call_api_with_retries(prompt: str, system: str | None, json_mode: bool) -> 
 
     while keys_tried < len(_API_KEYS):
         try:
-            return _raw_generate(prompt, system, json_mode, use_response_format)
+            return _raw_generate(
+                prompt,
+                system,
+                json_mode,
+                model,
+                max_tokens,
+                reasoning_effort,
+                use_response_format,
+            )
         except Exception as exc:
             last_exc = exc
             if json_mode and use_response_format and _is_json_validate_failure(exc):
@@ -268,7 +319,7 @@ def _call_api_with_retries(prompt: str, system: str | None, json_mode: bool) -> 
                 and getattr(exc, "status_code", None) == 404
             ):
                 raise RuntimeError(
-                    f"Groq model {MODEL!r} is not available for this account. "
+                    f"Groq model {model!r} is not available for this account. "
                     "Set GROQ_MODEL in .env to a live model "
                     "(e.g. openai/gpt-oss-20b)."
                 ) from exc

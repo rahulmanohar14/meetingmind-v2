@@ -1,0 +1,42 @@
+1. Alice: Hey folks, quick heads‑up, I’m out for lunch Friday, so let’s get today’s items sorted.
+2. Priya: Yeah, same as Monday, I need the blockers list now.
+3. Bob: Honestly, the rate limits are still spiking after the March 31 simulation.
+4. Sarah: I don’t want to overpromise on timing, but the a11y audit vendor finally sent the contract on Tuesday.
+5. Marcus: I’d want that in writing before we sign anything, so expect a formal request by next Wednesday.
+6. Elena: I’m still reconciling the Q2 spend, the budget for launch support is… not finalized.
+7. Alice: So the budget—can we get a number for the campaign spend by Thursday?
+8. Bob: Hang on—two more sprints, realistically, to get the feature flag scaffolding ready for the throttling.
+9. Priya: That’s two sprints, not one, and I can’t commit the dev team until we have that budget locked.
+10. Sarah: The audit findings are due next week, but we haven’t assigned an owner yet.
+11. Marcus: I can’t commit to a date until legal reviews the vendor SLA on Friday.
+12. Elena: The finance queue is still waiting on the revised forecast, which ties into that same spend.
+13. Bob: Feature flag toggle—I'll have a prototype by Friday, but need the flag config in ORI‑412 first.
+14. Alice: Okay, so Bob, you’ll own the flag, and Priya, you’ll scope the work—who’s the owner for the audit?
+15. Sarah: I think we should park that for now, maybe assign Nina next week?
+16. Priya: Parking it doesn’t move anything, we need a name now.
+17. Marcus: I’ll put a note that the compliance thing needs sign‑off, but I can’t be the owner.
+18. Bob: —the throttling can be mitigated with a dynamic limit, but that adds latency.
+19. Alice: Let’s park the throttling mitigation and focus on the budget approval.
+20. Elena: I can probably get a provisional number by end of day Wednesday, but it’ll be a rough estimate.
+21. Sarah: The same audit vendor also flagged some contrast issues on the checkout flow.
+22. Bob: Yeah, and the load test hit the limits at 12 k RPS, which is above our target.
+23. Priya: That’s why we need the flag, otherwise the capacity will hit the ceiling.
+24. Marcus: I’ve emailed the compliance team on Thursday, expecting a reply by next Monday.
+25. Alice: I don’t want to guess today—who can give me a final figure for the cloud capacity uplift?
+26. Bob: I can pull the current usage from the metrics system, but it’ll be an estimate.
+27. Elena: Estimate is fine, just put a note that it’s provisional and we’ll adjust after the board meeting.
+28. Sarah: The audit will be ready for review on the 12th, assuming the vendor stays on schedule.
+29. Priya: That’s two weeks from now, which conflicts with the sprint that ends on the 9th.
+30. Bob: Wait, what? —the flag rollout can be split across sprints.
+31. Alice: So we’re doing: Bob on the flag, Elena on the provisional budget, and we’ll circle back on the audit owner after the 12th.
+32. Marcus: I can add a clause to the contract on the 14th, if that works.
+33. Sarah: I’ll hold off on finalizing the contrast checks until we have the audit sign‑off.
+34. Priya: Same as before, I need that budget number before I can commit developers.
+35. Bob: Honestly, the capacity limit will bite us if we don’t get the extra nodes by next week.
+36. Elena: I’ll push the finance approval through the queue by Thursday, but can’t guarantee it’ll clear.
+37. Alice: Fine, let’s leave the flag work with you, Bob, and the budget with you, Elena—no further objections?
+38. Marcus: No objections, just a reminder that any changes need written approval.
+39. Sarah: I’ll follow up with the vendor on the audit findings tomorrow.
+40. Priya: And I’ll re‑estimate the effort for ORI‑412 once we have that capacity number.
+41. Bob: Yeah, that should keep us on track, assuming the flag lands on schedule.
+42. Alice: Great, we’ll reconvene Monday and see where that stands.

@@ -1,0 +1,38 @@
+1. Alice: Hey team, quick heads‑up, I’m still on call with Jen about the Q2 roadmap, but let’s dive in.
+2. Bob: Yeah, honestly the auth flow—
+3. Alice: —hang on, I need that clarified before we go further.
+4. Bob: …I think we need two more sprints, realistically, for the token exchange piece.
+5. Sarah: I don’t want to overpromise on timing, but the design handoff for that UI was done on Tuesday.
+6. Danny: I ran it twice and got two different answers, so the flaky test on ORI‑412 is still flaky.
+7. Bob: Feature flag can toggle the new endpoint, that’s the quick fix.
+8. Alice: Who can own that flag rollout?
+9. Danny: I can probably get the flag in place by Thursday.
+10. Sarah: That works as long as the accessibility notes we added last week stay intact.
+11. Bob: Honestly, the backend latency numbers from Monday’s load test were 1.8 s, not ideal.
+12. Alice: Okay, let’s park the latency for now, focus on the go‑live date.
+13. Bob: The board asked for a date on March 28, right?
+14. Alice: I heard that too, but I don’t want to guess today.
+15. Sarah: The compliance checklist we built on 3/5 still has that “DataCorp thing” clause missing.
+16. Danny: I’ll flag that missing clause in the test suite, but it won’t break the build.
+17. Bob: Two more sprints, realistically, means we push the launch to early April.
+18. Alice: Not acceptable, we need that 28th. Who can cut scope to make it happen?
+19. Sarah: We could drop the “advanced filters” widget, that’s ticket ORI‑399.
+20. Bob: Or we could push the widget behind a flag and hide it for launch.
+21. Danny: I can add the flag, but the test flakiness will still be there.
+22. Alice: So we’re doing the flag for the widget, and…
+23. Bob: …we still need to finish the auth flow, that’s ORI‑412, and the flag won’t help there.
+24. Sarah: I’m not comfortable moving the auth piece past launch, it’s a compliance risk.
+25. Alice: I hear you, but the board’s deadline is non‑negotiable.
+26. Bob: Hang on—if we defer the auth flow, we have to expose a fallback token, that’s a security hole.
+27. Danny: I can write a temporary mock, but it’ll need manual reset each night.
+28. Alice: That’s a lot of manual work, I don’t want that.
+29. Sarah: Same as Monday, the prototype notes are in the folder, maybe we can reuse them for a quick mock.
+30. Bob: Feature flag again, we could gate the whole auth module behind it.
+31. Alice: I’m not convinced that’s safe, but…
+32. Danny: …I’ll set up the flag on Friday night, as we discussed.
+33. Bob: Honestly, the launch week will be rough if we’re still toggling core flows.
+34. Alice: So we have a flag for the widget, a temporary mock for auth, and I’ll leave it with me to get the final sign‑off on the 28th.
+35. Sarah: I’ll double‑check the compliance checklist after the mock is in place.
+36. Danny: Still nothing on the flaky test for ORI‑412, but I’ll keep an eye on it.
+37. Bob: Two more sprints, realistically, still sounds like a stretch, but we can try to compress.
+38. Alice: Fine, let’s aim for the 28th, keep the flag on the widget, the mock for auth, and I’ll circle back if anything breaks.

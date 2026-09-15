@@ -1,0 +1,48 @@
+1. Alice: Hey everyone, hope you had a good weekend – my kids finally let me sleep past six on Saturday, and I’m feeling… on track for the May 1 go‑live.
+2. Raj: Quick snapshot, the product’s shaping up, but we need to make sure the fundamentals hold.
+3. Bob: honestly, the platform’s still hitting the 5 k rps ceiling we saw on Tuesday, April 22, and the DataCorp contract is still in limbo, which is…
+4. Sarah: I don’t want to overpromise on timing, especially with the new accessibility checklist we need to clear.
+5. Marcus: I’d want that in writing before we sign anything with the vendor, so I’m flagging the contract clause on production API keys.
+6. Elena: I can’t commit a number today on the launch support spend, the finance queue is still reconciling Q2.
+7. Priya: Who’s blocked on ORI‑412?
+8. Nina: directionally right, the instrumentation gap around API latency means we can’t answer the load question definitively.
+9. Danny: I ran it twice and got two different answers on the retry logic.
+10. Tomas: Acme’s product team mentioned they’re still waiting on the onboarding wizard before they can roll it out.
+11. Bob: hang on— we could toggle the feature flag for tax calculation and push that post‑launch, that would buy us…
+12. Alice: let’s park that flag discussion, we need a concrete owner for the tax schema migration.
+13. Raj: What would have to be true for May 1 to hold?
+14. Priya: If the feature flag is on, we still need a clear owner for the schema, and the DataCorp thing can’t block the API keys.
+15. Bob: two more sprints, realistically, and we’ll have the load test harness stable enough for the final pass.
+16. Sarah: That works as long as the compliance review doesn’t surface any new WCAG‑2.2 issues.
+17. Marcus: The legal sign‑off on the contract is still pending, I need an amendment drafted – can’t give a date.
+18. Elena: The budget line for extra cloud capacity is still in the approval queue, I’ll get a firm figure after the Q2 close.
+19. Nina: The data we need to prove the 5 k rps claim is still being aggregated, so I wouldn’t put that in a board deck yet.
+20. Danny: The flaky test on the login flow still intermittently fails on Chrome 120.
+21. Tomas: The same Acme contact said they’d like the reporting dashboard by the end of next week if we can ship the API keys.
+22. Priya: That’s two sprints, not one, and I need a clear owner for the migration before we commit.
+23. Alice: I don’t want to guess today on whether the launch date is solid, but the marketing plan is already aligned to the 28th.
+24. Bob: the backend load we saw on Tuesday was already at the limit, so without the flag we’ll hit a wall.
+25. Priya: Who’s blocked on the tax schema, again?
+26. Elena: I still don’t have the final budget number, the finance team is waiting on the revised forecast.
+27. Marcus: I’ll need the revised contract language in writing before I can sign off on the API key release.
+28. Nina: The instrumentation gap is still there, so the “directionally right” estimate could shift.
+29. Danny: I’ll keep monitoring the flaky login test, but it’s not a show‑stopper yet.
+30. Sarah: If the accessibility audit comes back clean, we can keep the current rollout cadence.
+31. Alice: So we’re doing the flag toggle for tax, and we’ll circle back on the budget after the Q2 close.
+32. Raj: (nods) Got it. —
+33. Bob: feature flags are the quick fix, but they add technical debt we’ll need to pay back after launch.
+34. Priya: I’ll assign ORI‑412 to the backend squad and set a due date for Friday.
+35. Elena: I’ll push the budget request through the approval chain today, but I can’t promise a date.
+36. Marcus: I’ll draft the amendment for the vendor contract and send it to legal by next Thursday.
+37. Nina: Once we have the new metrics, we can validate the 5 k rps claim more confidently.
+38. Danny: I’ll add a test case for the flag‑controlled tax path to the CI suite.
+39. Tomas: Acme will likely push back if we don’t have the API keys cleared by early May.
+40. Alice: Let’s park the deeper discussion on the launch timeline for now; we’ll revisit after the budget lands.
+41. Bob: we could also spin up a staging environment with higher limits to simulate the load.
+42. Priya: Who’s blocked on the staging environment?
+43. Elena: I’m still waiting on the finance sign‑off, so I can’t release any extra capacity budget yet.
+44. Marcus: I can’t commit to a signing date without the amendment, so I’ll keep it in the pipeline.
+45. Nina: The data pipeline still needs a tweak before we can surface real‑time RPS numbers.
+46. Danny: I’ll run the flaky login test again after the next deploy, see if it stabilizes.
+47. Alice: I’ll leave the flag decision with Bob, and we’ll check in on the migration owner by next Monday.
+48. Bob: okay, I’ll own the flag toggle and give an update by Thursday.

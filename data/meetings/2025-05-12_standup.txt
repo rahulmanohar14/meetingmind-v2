@@ -1,0 +1,36 @@
+1. Alice: Weekend was crazy, kid's soccer tournament ran into Sunday night, but I got a few minutes to breathe.
+2. Alice: Quick check on that vendor thing – we still don’t have the signature after the new counsel pushed the 30% uplift on Tuesday.
+3. Bob: honestly, the uplift feels steep, and with the counsel switch on May 10 they’re dragging the review, so I’m thinking we should just build the integration ourselves.
+4. Priya: Who’s looking at the headcount freeze? The req we opened for a second backend on April 24 is still on hold.
+5. Marcus: I’ve logged four, maybe five follow‑ups with them since the renewal notice on March 10.
+6. Bob: If we go in‑house we can spin up a feature flag toggle for the API keys and have a prototype by the end of next week.
+7. Alice: Who’s owning that prototype and what’s the target date?
+8. Priya: That timeline sounds tight – that’s two sprints, not one, for a full key rollout.
+9. Bob: I can have a minimal version by Thursday, May 16, and then iterate.
+10. Marcus: I should note I advised against the original integration path back in the April 10 review, but the team moved forward anyway.
+11. Alice: let’s park that discussion on the flag toggle for now and move on to the hire block.
+12. Bob: feature flags are the answer to most of these env issues, we just need the toggle in CI.
+13. Priya: Who’s blocked on ORI‑412? I need to reassign if it’s stuck.
+14. Bob: I’m the flag owner, I’ll push the toggle by Thursday.
+15. Alice: circle back to the vendor uplift after we nail the in‑house build.
+16. Priya: that’s two sprints, not one, for the backend work on the integration.
+17. Marcus: I’d want that in writing before we commit any budget to the fallback.
+18. Alice: I don’t want to guess today, but we need a go‑live date for the internal launch – maybe the 28th?
+19. Bob: honestly, with the current test flakiness I’d be wary of a May 28 internal go‑live.
+20. Priya: still nothing on the backfill, the budget team hasn’t moved.
+21. Marcus: counting business days, that would be eight days from Friday if we start Monday.
+22. Alice: What’s the impact of the 30% uplift on our margin for that vendor?
+23. Bob: the uplift would shave roughly $45K off the projected margin for Q2, which is a big hit.
+24. Priya: We need a firm decision on the in‑house fallback now, otherwise the API key work stalls.
+25. Bob: I’ll take the lead on the fallback and aim to have a working stub by next Thursday.
+26. Alice: So Bob, you’re the owner, and you’ll have a demo by May 16 – that’s the date we’ll circle back to.
+27. Marcus: I can’t commit to that timeline until legal signs off on the new contract language.
+28. Priya: I need that stub by Thursday to unblock ORI‑412, otherwise the sprint gets delayed.
+29. Alice: let’s park the hiring discussion for the next sprint and circle back after we see the prototype.
+30. Bob: hang on— the CI toggle script is still failing on the staging cluster—
+31. Priya: —the test suite is also choking on the missing env var, can we push that fix?
+32. Marcus: —I’ll follow up with the counsel again tomorrow, but I won’t have a signed doc before the end of the week.
+33. Alice: Okay, so we’ll proceed with the in‑house build, Bob owns it, deadline Thursday May 16, and we’ll revisit the vendor uplift after the demo.
+34. Bob: That means the feature flag will be live in staging by Wednesday, and I’ll ping the team when it’s merged.
+35. Priya: Good, I’ll reassign ORI‑412 to the other backend once the flag is up.
+36. Marcus: I’ll send a written note on the follow‑up count and the counsel change by Friday.

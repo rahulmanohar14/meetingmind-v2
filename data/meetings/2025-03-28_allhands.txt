@@ -1,0 +1,48 @@
+1. Alice: Good morning, everyone—hope you had a decent weekend, I’m still recovering from the marathon.
+2. Bob: Yeah, honestly the last sprint felt like two weeks in one.
+3. Alice: Let’s get to the numbers—Orion is at 68% of the feature set, that’s up from 55% last Tuesday.
+4. Sarah: I don’t want to overpromise on timing, but the new onboarding flow is still in QA.
+5. Raj: Roughly, right? Why do we keep calling the go‑live “roughly” when we’ve got a target on the calendar?
+6. Alice: Because the board only asked for a committed date on the 3rd, and we haven’t locked it yet.
+7. Bob: Hang on—if we flip the feature flag for the analytics pane on Friday, we could shave a day.
+8. Elena: I can’t commit a number today, but the finance model will be updated after the Q1 close.
+9. Marcus: I’d want that in writing before we tell anyone a date.
+10. Tomas: Ridgeline are asking again about the reporting drill‑down, they said “we need it next week.”
+11. Alice: Let’s park that anecdote for now, focus on the launch.
+12. Bob: Two more sprints, realistically, and we’re good.
+13. Sarah: That works as long as the accessibility review on the checkout doesn’t surface new issues.
+14. Danny: I ran the regression suite twice and got two different answers on the export job.
+15. Bob: —
+16. Alice: —so we’ll keep the flag off until we confirm the export is stable.
+17. Raj: The board wants a concrete date, not a “roughly” estimate.
+18. Alice: I’ll circle back after the next sprint review on Wednesday.
+19. Tomas: The churn risk on that account spikes if we miss the window.
+20. Marcus: I can’t commit to a timeline on the amendment, but I’ll have a draft by Friday.
+21. Elena: Same as Monday on the forecast, still aligning with the migration assumptions.
+22. Bob: Honestly, the backend load test on ORI‑412 still shows a 5% variance.
+23. Sarah: I’m still not sure about the color contrast on the new dashboard, that could delay compliance sign‑off.
+24. Danny: The flaky test is in ticket ATL‑88, it’s intermittent.
+25. Alice: Who’s owning that test cleanup?
+26. Danny: I’m on it, should be resolved by Thursday.
+27. Raj: If we can nail the date, we can align the Atlas migration after the launch—any chance we can lock it this week?
+28. Bob: The migration scope is still undefined, we need the proration numbers.
+29. Elena: I’ll update the Q1 forecast after the proration is in, that’s the same as what I said on the 27th.
+30. Marcus: Still nothing on the legal review of the billing vendor.
+31. Sarah: I don’t want to overpromise, but the WCAG audit is scheduled for next Tuesday.
+32. Alice: So we’re doing the launch and then the migration, right?
+33. Bob: Yeah, feature flags will let us toggle the new billing UI after go‑live.
+34. Tomas: The account manager said “if we miss this, they’ll look elsewhere.”
+35. Raj: That’s why I’m pushing for a hard date—no more “roughly.”
+36. Alice: Okay, so let’s say Thursday the 28th for go‑live, pending the flag stability.
+37. Marcus: I can’t commit to that timeline without the amendment signed.
+38. Bob: I’ll have the flag toggle tested by Wednesday morning.
+39. Elena: Still nothing on the headcount request; HR said they’re reviewing it.
+40. Sarah: The compliance team will need a final sign‑off by Friday, otherwise we push.
+41. Danny: The test flake might bite us on Friday if we don’t fix it.
+42. Alice: So we’re leaving the launch on the 28th, with the flag on Wednesday, and the audit sign‑off Friday.
+43. Raj: If that holds, I’ll present the date to the board tomorrow.
+44. Bob: —
+45. Alice: —any objections?
+46. Marcus: I’ll need the amendment in writing before I can sign off.
+47. Sarah: I’ll double‑check the contrast ratios by Wednesday.
+48. Alice: All right, moving on.

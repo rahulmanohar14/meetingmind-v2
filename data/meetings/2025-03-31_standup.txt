@@ -1,0 +1,35 @@
+1. Alice: Hey all, quick coffee before we dive—how's the week shaping up?
+2. Bob: Honestly, the load test yesterday hit the limits at around 12k rps, which is what we expect for Orion launch week.
+3. Nina: Directionally right, but I saw we don't have any latency metrics for that spike—nothing in the dashboard.
+4. Bob: Yeah, that’s the gap—no instrumentation on the throttling path.
+5. Sarah: I don't want to overpromise on timing, but the audit on the new checkout flow is still floating.
+6. Marcus: I'd want that in writing before I can sign off on any remediation schedule.
+7. Alice: Who's taking ownership of that audit then? We need a name and a date.
+8. Sarah: It was supposed to be Jamie from compliance, but she’s out on Thursday.
+9. Bob: Hang on—if we flag the rate limits, we could mitigate the spike for launch.
+10. Nina: The same thing we tried with the feature flag on ORI-412, right?
+11. Bob: Exactly, but the flag only throttles downstream, not the auth burst.
+12. Alice: So we're flagging that, but we still need to measure it—who can add the metric?
+13. Nina: I can spin up a quick Grafana panel by Friday, but I need the raw logs from the API gateway.
+14. Bob: The logs are in S3 under bucket prod-logs—just pull the last 48 hours.
+15. Marcus: I’ll need to see the legal review of that data export, too.
+16. Alice: Fine, Marcus, you review the export and Nina, you set up the panel. Owner?
+17. Nina: Leave it with me.
+18. Bob: Two more sprints, realistically, and we’ll have the flag baked in.
+19. Sarah: That works as long as the compliance sign‑off isn’t delayed past Wednesday.
+20. Alice: Wednesday is the target for the flag rollout; do we have a concrete date for the audit sign‑off?
+21. Marcus: I can’t commit to that timeline until I see the remediation plan.
+22. Bob: —yeah, but the rate limit alerts are already firing in prod.
+23. Alice: Let's park that and circle back after we have the panel.
+24. Nina: Still nothing in the current alerting rules for that specific threshold.
+25. Bob: I can add a rule, but it’ll be a hotfix—maybe Thursday?
+26. Alice: Thursday is okay, but I need an owner on that hotfix.
+27. Bob: I’ll take it, but I’ll need a feature flag toggle by Friday.
+28. Sarah: I’ll double‑check the contrast ratios by Wednesday, as we discussed last week.
+29. Marcus: I’ve emailed the contract team on the data export, expect a response Monday.
+30. Nina: The instrumentation gap means we can’t answer “how many requests were throttled” in the board deck yet.
+31. Alice: I don’t want to guess today—who can give me a number for throttled requests by Friday?
+32. Bob: I can pull a sample from the logs, but it’ll be an estimate.
+33. Nina: Estimate is fine for now, just put a note that it’s provisional.
+34. Sarah: The audit findings are still unowned; we need to assign that before the compliance deadline.
+35. Alice: So we're doing: Bob on the hotfix, Nina on the panel, Marcus on the export review, and we’ll reconvene on Thursday to lock the audit owner. Any objections?

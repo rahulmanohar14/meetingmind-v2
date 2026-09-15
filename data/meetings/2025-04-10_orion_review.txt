@@ -1,0 +1,40 @@
+1. Alice: Quick check‑in, hope everyone’s survived the weekend, but let’s jump to Orion.
+2. Bob: Honestly—hang on—last week’s load test hit the limits at about 12k rps.
+3. Marcus: I’m still counting the business days since we sent that follow‑up on the contract.
+4. Priya: ORI‑412 is blocked because the API keys are still in limbo.
+5. Danny: I ran the onboarding flow twice and got two different answers on the UI toggle.
+6. Alice: Who’s still chasing that vendor thing?
+7. Marcus: She’s on it, but I can’t commit to a date until we have it in writing.
+8. Bob: Two more sprints, realistically, if we keep the flag on for throttling.
+9. Priya: That’s two sprints, not one, and we’re already at sprint 5.
+10. Alice: So we either wait on the DataCorp thing or we build our own.
+11. Marcus: I’d want that in writing before we commit to any in‑house solution.
+12. Bob: …if we built it, I’d estimate six weeks, give or take.
+13. Alice: Six weeks is out of scope for this release, so let’s…park that.
+14. Danny: The flaky test on the report export still fails on CI.
+15. Priya: Who’s blocked on that?
+16. Bob: It’s the same thing as the rate limits, the test hits the throttling guard.
+17. Marcus: I’ve flagged that the current agreement doesn’t cover production keys.
+18. Alice: I’m not guessing today, but we need an owner for that integration.
+19. Priya: Leave it with me, I’ll coordinate with the legal side after this.
+20. Bob: Feature flags could let us flip the integration on when the keys arrive.
+21. Alice: That’s a stop‑gap, but we need a decision—integrate with them or not.
+22. Marcus: I’d advise against it until we have the signature.
+23. Bob: …but we’re already two weeks past the simulated launch volume.
+24. Alice: The team voted on this last Thursday, remember?
+25. Priya: Yeah, same as Monday, we said we’d go ahead.
+26. Alice: So we’re doing the integration then.
+27. Marcus: I can’t commit to that timeline without written consent.
+28. Bob: I’ll push a flag for the throttling tomorrow—still need the keys though.
+29. Danny: The test that flaked was the same one from the April 3 run.
+30. Priya: That’s two tickets, ORI‑412 and ORI‑389, both waiting on the same thing.
+31. Alice: Okay, let’s make that the owner—Priya, you’re on the integration, deadline Thursday.
+32. Marcus: I’ll send the request for the written amendment by Friday.
+33. Bob: I’ll have the feature flag code merged by end of day Tuesday.
+34. Danny: I’ll re‑run the suite after the flag lands, see if the UI stabilizes.
+35. Alice: Any other blockers on capacity?
+36. Bob: The rate limits are still at 10k, we’re seeing spikes at 13k on the simulation.
+37. Marcus: That’s why the legal team wants the contract updated before we expose production.
+38. Priya: If we can’t get the keys, we’ll have to roll back the onboarding flow.
+39. Alice: Let’s not guess, but we need a fallback plan by next Wednesday.
+40. Danny: I’ll document the flaky case in ticket ORI‑398 and tag it for triage.

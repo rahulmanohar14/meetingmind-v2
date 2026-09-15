@@ -1,0 +1,16 @@
+1. Alice: I finally got to that trail run on Saturday, but let’s focus—who’s taking ownership of the internal‑only release and what’s the target day?
+2. Bob: honestly, if we spin up the staging flag set on Friday, we could have a sandbox ready by Monday.
+3. Priya: ORI‑412 is still open, and it blocks the data‑ingest pipeline; that’s two sprints, not one.
+4. Sarah: I don’t want to overpromise on timing, but the compliance thing still needs the a11y findings reviewed.
+5. Marcus: I can’t commit to that timeline without the vendor amendment signed, and I’ll need five business days to get it back.
+6. Danny: I ran it twice and got two different answers on the login flow integration test.
+7. Bob: hang on— the flaky test is probably due to the feature flag toggle being off in the CI env—
+8. Alice: Let’s park that discussion on the flaky test for now and move to the release checklist.
+9. Priya: Who’s blocked on the flag rollout? I need to know so I can reassign.
+10. Bob: the flag owner is me, and I’ll push the toggle by Thursday.
+11. Sarah: The audit vendor just emailed; they’re pushing the review to next Thursday, that’s the third reschedule.
+12. Marcus: Still nothing on the DataCorp signature; I chased them again Tuesday and they said they’re reviewing.
+13. Alice: I don’t want to guess today, but we need a go‑live day for the internal launch—maybe the 28th?
+14. Danny: the flaky login still spikes on the nightly build, and the test flaps when the flag is toggled—
+15. Bob: two more sprints, realistically, to finish the API key work and get the contract cleared.
+16. Priya: That’s a hard stop; if we wait past the

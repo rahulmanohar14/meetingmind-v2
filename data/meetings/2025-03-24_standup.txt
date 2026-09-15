@@ -1,0 +1,35 @@
+1. Alice: Good morning, everyone—quick personal note, I finally got that new bike, but let's jump in.
+2. Bob: Yeah, same as last week on the auth flow, honestly—still on hold.
+3. Sarah: I need to ask, who owns the audit on the checkout flow?
+4. Marcus: I don’t have an answer, but I’ve got a follow‑up scheduled for Tuesday on that vendor thing.
+5. Bob: Hang on—feature flag could mitigate the auth issue, I could spin one up Thursday.
+6. Alice: We need an owner for that audit, can someone take it?
+7. Sarah: I can’t commit to a date, but I’ll look after the design review on Monday.
+8. Bob: Two more sprints, realistically, for the core API, but that’s optimistic.
+9. Marcus: Still nothing from DataCorp since their notice on the 10th.
+10. Alice: Did we get any word from Tomas about the beta cohort?
+11. Bob: No, same silence, I think.
+12. Sarah: The compliance thing for the checkout—I'm seeing a few WCAG 2.1 items, but not sure how to prioritize.
+13. Marcus: I'd want that in writing before we flag anything.
+14. Alice: Okay, let's park the audit ownership for now, circle back Friday.
+15. Bob: Feature flag again, I’ll set up a toggle on Thursday—
+16. Sarah: Wait, do we need to adjust the UI spec for that?
+17. Alice: Not today, let’s keep it on the backlog.
+18. Bob: Yeah.
+19. Marcus: I can’t commit to a timeline until the contract clause is signed.
+20. Sarah: I don’t want to overpromise on timing for the a11y fixes.
+21. Alice: Anyone out this week?
+22. Bob: I’m off Friday for the conference, but I’ll be on Slack.
+23. Marcus: I have a court appearance on Wednesday, will be late.
+24. Sarah: I have a client call Monday morning, but should be back by 11.
+25. Alice: Same as Monday, the Orion launch week concerns are still pending.
+26. Bob: Honestly, the launch week will be rough if we’re still toggling core flows.
+27. Marcus: I’ll follow up with the vendor on Tuesday, see if they can add the key clause.
+28. Sarah: The same thing we talked about on the 13th, still no update.
+29. Alice: Did we ever assign the checkout audit to anyone?
+30. Bob: Not yet.
+31. Marcus: Still nothing. I chased them again Friday.
+32. Sarah: I can probably draft a remediation plan after the audit, maybe by next Wednesday.
+33. Alice: Let's park that too, we’ll revisit after the vendor sign‑off.
+34. Bob: Feature flag again, I’ll set up a toggle on Thursday—
+35. Marcus: I’ll double‑check the legal checklist after the meeting.

@@ -1,15 +1,15 @@
 # Retrieval benchmark
 
-12 single-hop golden questions. The 5 multi-hop questions are evaluated separately in `agent_eval.md`, because they need relation traversal rather than ranked chunks.
+12 single-hop golden questions over 85 indexed turns.
 
 ## Retrieval configurations
 
 | config | recall@5 | MRR@10 | mean latency (ms) |
 |---|---:|---:|---:|
-| dense | 1.000 | 0.892 | 18.8 |
-| hybrid+rerank | 1.000 | 0.917 | 194.3 |
-| bm25 | 0.917 | 0.883 | 0.1 |
-| hybrid | 0.917 | 0.885 | 17.6 |
+| dense | 1.000 | 0.892 | 18.2 |
+| hybrid+rerank | 1.000 | 0.917 | 357.6 |
+| bm25 | 0.917 | 0.883 | 0.2 |
+| hybrid | 0.917 | 0.885 | 16.0 |
 
 ## rrf_k sensitivity (hybrid fusion)
 

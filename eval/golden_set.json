@@ -82,46 +82,5 @@
       "sample_transcript:19"
     ],
     "type": "single_hop"
-  },
-  {
-    "question": "What vendor issue is blocking production API keys, and how does that delay launch integration work?",
-    "answer_turn_ids": [
-      "meeting_week1:1",
-      "meeting_week2:2"
-    ],
-    "type": "multi_hop"
-  },
-  {
-    "question": "What beta launch date did the team keep in week one, and what fallback release plan did they adopt if blockers remain?",
-    "answer_turn_ids": [
-      "meeting_week1:7",
-      "meeting_week3:7"
-    ],
-    "type": "multi_hop"
-  },
-  {
-    "question": "Why is budget approval delayed, and what launch capacity work does that prevent?",
-    "answer_turn_ids": [
-      "meeting_week1:13",
-      "meeting_week2:13"
-    ],
-    "type": "multi_hop"
-  },
-  {
-    "question": "What is the recurring accessibility audit status, and who owns remediation sign-off once findings arrive?",
-    "answer_turn_ids": [
-      "meeting_week2:3",
-      "meeting_week3:11"
-    ],
-    "type": "multi_hop"
-  },
-  {
-    "question": "How did the DataCorp contract escalation change from week one to week two, and is the contract resolved by week three?",
-    "answer_turn_ids": [
-      "meeting_week1:9",
-      "meeting_week2:9",
-      "meeting_week3:1"
-    ],
-    "type": "multi_hop"
   }
 ]

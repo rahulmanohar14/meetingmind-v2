@@ -1,4 +1,4 @@
-"""Benchmark dense / BM25 / hybrid / hybrid+rerank on single_hop golden questions."""
+"""Benchmark dense / BM25 / hybrid / hybrid+rerank on the golden question set."""
 
 from __future__ import annotations
 
@@ -124,27 +124,17 @@ def main() -> None:
         raise RuntimeError(f"No transcripts found in {ROOT / 'data'}")
 
     golden = json.loads(GOLDEN_PATH.read_text(encoding="utf-8"))
-    if not isinstance(golden, list):
-        raise ValueError(f"Expected a JSON array in {GOLDEN_PATH}")
+    if not isinstance(golden, list) or not golden:
+        raise ValueError(f"Expected a non-empty JSON array in {GOLDEN_PATH}")
 
-    single_hop = [q for q in golden if q.get("type") == "single_hop"]
-    multi_hop = [q for q in golden if q.get("type") == "multi_hop"]
-    print(
-        f"Excluded {len(multi_hop)} multi_hop questions: recall@5 over ranked "
-        "chunks is the wrong metric for them, since they need relation "
-        "traversal. They are measured against the graph in "
-        "scripts/eval_agent.py."
-    )
-    print(f"Evaluating {len(single_hop)} single_hop questions")
-    if not single_hop:
-        raise RuntimeError("No single_hop questions found in the golden set")
+    print(f"Evaluating {len(golden)} golden questions")
 
     print(f"Building index with {EMBED_MODEL} ...")
     index = build_index(turns, EMBED_MODEL, PERSIST_DIR)
     print(f"Indexed turn count: {len(index.turn_ids)}")
 
     configs = ["dense", "bm25", "hybrid", "hybrid+rerank"]
-    rows = [_run_config(name, index, single_hop) for name in configs]
+    rows = [_run_config(name, index, golden) for name in configs]
     rows.sort(key=lambda r: r["recall@5"], reverse=True)
 
     table = _format_table(rows)
@@ -152,21 +142,20 @@ def main() -> None:
     print(table)
 
     print("\nSweeping rrf_k ...")
-    sweep_table = _run_rrf_sweep(index, single_hop)
+    sweep_table = _run_rrf_sweep(index, golden)
     print(sweep_table)
 
+    n = len(golden)
     body = "\n\n".join(
         [
             "# Retrieval benchmark",
-            f"{len(single_hop)} single-hop golden questions. The "
-            f"{len(multi_hop)} multi-hop questions are evaluated separately in "
-            "`agent_eval.md`, because they need relation traversal rather than "
-            "ranked chunks.",
+            f"{n} single-hop golden questions over "
+            f"{len(index.turn_ids)} indexed turns.",
             "## Retrieval configurations",
             table,
             "## rrf_k sensitivity (hybrid fusion)",
             sweep_table,
-            f"With n={len(single_hop)}, one question is worth 0.083 of recall@5, "
+            f"With n={n}, one question is worth {1.0 / n:.3f} of recall@5, "
             "so gaps of a single question are noise. Read these numbers as "
             "ruling out large regressions, not as fine-grained rankings.",
         ]

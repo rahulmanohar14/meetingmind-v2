@@ -1,5 +1,8 @@
-Project: meetingmind-v2. A meeting-transcript QA system with hybrid vector
-retrieval, a typed knowledge graph, and a LangGraph routing agent.
+Project: meetingmind-v2, branch rag-only. A meeting-transcript QA system with
+hybrid vector retrieval and a three-node LangGraph RAG agent. The knowledge
+graph and the vector/graph router were measured, neither store dominated, and
+both were removed on this branch. They remain on `main` as a recorded
+experiment. Do not reintroduce them.
 
 ENVIRONMENT
 - Python 3.14 in .venv at the repo root. Windows, Git Bash.
@@ -18,18 +21,18 @@ HARD RULES
 
 ARCHITECTURE
 - engine/ holds all logic. scripts/ holds runnable entry points. app.py is UI only.
-- LangGraph nodes are thin wrappers around engine functions. Retrieval and graph
-  logic never live inside agent.py.
+- LangGraph nodes are thin wrappers around engine functions. Retrieval logic
+  never lives inside agent.py.
 - Chroma collections use hnsw:space cosine explicitly. The L2 default degrades
   normalized embeddings.
-- Every extracted entity and relation carries the turn id it came from.
+- Every chunk and every answer carries the turn id it came from.
   Citations depend on it.
 
 LOCKED DECISIONS, do not propose alternatives
-ChromaDB file-backed, NetworkX saved as JSON, rank-bm25 fused with RRF,
-BAAI/bge-small-en-v1.5 embeddings, local cross-encoder rerank, LangGraph,
-single agent. No Postgres, no pgvector, no Neo4j, no Qdrant, no vector-DB
-migration, no text classifier, no multi-agent supervisor.
+ChromaDB file-backed, rank-bm25 fused with RRF, local cross-encoder rerank,
+LangGraph, single agent. No Postgres, no pgvector, no Neo4j, no Qdrant, no
+vector-DB migration, no knowledge graph, no text classifier, no multi-agent
+supervisor.
 
 SCOPE
 Do not add features that were not asked for. No config abstraction layers,

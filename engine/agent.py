@@ -1,4 +1,12 @@
-"""LangGraph routing agent: vector vs graph retrieval, then generate."""
+"""LangGraph RAG agent: prepare the question, retrieve, generate.
+
+Three nodes. Exactly two LLM calls on the answering path (rewrite, generate)
+and one on the abstain path (rewrite only). The knowledge-graph routing layer
+this replaced is preserved on the `main` branch as a recorded experiment;
+neither store dominated the other, so the simpler one stays.
+
+Nodes are thin wrappers: all retrieval lives in engine.retrieval.
+"""
 
 from __future__ import annotations
 
@@ -9,28 +17,35 @@ from typing import Literal, TypedDict
 from langgraph.graph import END, START, StateGraph
 
 from engine.corpus import load_full_corpus, turn_id
-from engine.graph_store import find_entities, load_graph, local_search
 from engine.llm import complete
 from engine.retrieval import hybrid_search, load_index, rerank_with_threshold
 
 ROOT = Path(__file__).resolve().parents[1]
 EMBED_MODEL = "BAAI/bge-small-en-v1.5"
 PERSIST_DIR = ROOT / "data" / "chroma_db"
-GRAPH_PATH = ROOT / "data" / "graph.json"
 DATA_DIR = ROOT / "data"
 UPLOADS_DIR = ROOT / "data" / "uploads"
 
+# Candidates fused by hybrid_search, then cut to TOP_N by the cross-encoder.
+CANDIDATE_K = 20
+TOP_N = 5
+
+# Fixed string, not model output: the abstain path must cost zero API calls,
+# and a generated refusal would vary run to run and defeat the eval.
+ABSTAIN_ANSWER = (
+    "I could not find supporting evidence in the retrieved documents, "
+    "so I will not guess."
+)
+
 _index = None
-_graph = None
 _turns = None
 _app = None
 
 
 class AgentState(TypedDict):
     question: str
-    search_question: str
     history: list[dict]
-    route: str
+    standalone_question: str
     documents: list[str]
     answer: str
     decision_log: list[str]
@@ -46,180 +61,151 @@ def _history_block(history: list[dict], limit: int) -> str:
 
 
 def reload_stores() -> None:
-    """Drop cached corpus/index/graph so the next run reloads from disk."""
-    global _index, _graph, _turns
+    """Drop the cached corpus and index so the next run reloads from disk."""
+    global _index, _turns
     _index = None
-    _graph = None
     _turns = None
 
 
 def _ensure_stores() -> None:
-    global _index, _graph, _turns
+    global _index, _turns
     if _turns is None:
         _turns = load_full_corpus(DATA_DIR, UPLOADS_DIR)
     if _index is None:
         _index = load_index(_turns, EMBED_MODEL, PERSIST_DIR)
-    if _graph is None:
-        _graph = load_graph(GRAPH_PATH)
 
 
-def route_question(state: AgentState) -> AgentState:
-    """Pick the store and rewrite the question to stand alone, in one call.
+def prepare_question(state: AgentState) -> AgentState:
+    """Rewrite the question to stand alone. One LLM call.
 
-    Follow-ups like "who owns that?" are unsearchable on their own, so the
-    router also resolves them against the history. Folding the rewrite into
-    the routing call keeps the cost at two LLM calls per question.
+    A follow-up like "who owns that?" carries no searchable terms, so retrieval
+    on the raw text finds nothing. This resolves pronouns against the history
+    before anything is embedded.
+
+    `reasoning` is requested *before* `standalone_question` deliberately. The
+    routing version of this node asked for its decision first and scored 0.40;
+    moving the reasoning ahead of the decision took it to 0.94. The model
+    commits to whatever it emits first, so the first field has to be thinking.
     """
     question = state["question"]
     history_block = _history_block(state.get("history") or [], 3)
 
     prompt = (
-        "Route this question to a retrieval store and rewrite it to stand "
-        "alone.\n\n"
-        "route=graph when answering needs more than one fact linked together: "
-        "relationships, dependencies, blockers, ownership chains, knock-on "
-        "effects, how one thing affects another, how something changed across "
-        "weeks or meetings, or any question with two linked parts.\n"
-        "route=vector when a single turn contains the answer: a date, the "
-        "owner of one action item, one quoted status or decision.\n\n"
-        "Examples:\n"
-        '- "What is the agreed launch date?" -> vector (one stated fact)\n'
-        '- "What action item did Bob commit to?" -> vector (one turn)\n'
-        '- "What blocks launch and what else does that delay?" -> graph '
-        "(blocker plus its downstream effects)\n"
-        '- "How did the contract escalation change from week one to week '
-        'three?" -> graph (spans meetings)\n\n'
-        "standalone_question must resolve pronouns and references using the "
-        "history so it can be searched on its own. If the question is already "
+        "Rewrite the question below so it can be searched on its own against a "
+        "meeting-transcript index.\n\n"
+        "Resolve pronouns and back-references ('that', 'it', 'she', 'the same "
+        "one') using the conversation history. Otherwise stay close to the "
+        "original wording: do not answer the question, do not add facts, do "
+        "not split it into several questions. If the question is already "
         "self-contained, repeat it unchanged.\n\n"
         f"Recent history (last 3 turns):\n{history_block}\n\n"
         f"Question: {question}\n\n"
         "Return JSON with these keys in this order: "
-        '{"reasoning": "one short sentence on what answering requires", '
-        '"route": "vector" or "graph", "standalone_question": "..."}'
+        '{"reasoning": "one short sentence on what the question refers to", '
+        '"standalone_question": "..."}'
     )
     raw = complete(
         prompt,
         system=(
-            "You are a retrieval router. Respond with a single valid JSON "
-            "object only, no markdown and no commentary."
+            "You rewrite meeting questions for a retrieval system. Respond "
+            "with a single valid JSON object only, no markdown and no "
+            "commentary."
         ),
         json_mode=True,
     )
 
     log = list(state.get("decision_log") or [])
-    route_raw = ""
     standalone = ""
+    reasoning = ""
     try:
         data = json.loads(raw)
     except json.JSONDecodeError as exc:
-        log.append(f"route: router JSON invalid ({exc}); fell back to keyword match")
+        # Not silent: recorded in the decision log the UI shows. Searching the
+        # original question is a worse query but still a valid one, so this
+        # degrades rather than fails.
+        log.append(f"prepare_question: JSON invalid ({exc}); used question as-is")
         data = None
-    reasoning = ""
     if isinstance(data, dict):
-        route_raw = str(data.get("route") or "")
         standalone = str(data.get("standalone_question") or "").strip()
         reasoning = str(data.get("reasoning") or "").strip()
-    if not route_raw:
-        # Keyword fallback over the raw text keeps routing working even if the
-        # model ignores the JSON contract.
-        route_raw = raw
-
-    if "graph" in route_raw.strip().lower():
-        route = "graph"
-        reason = "Routed to graph for relational / multi-hop retrieval."
-    else:
-        route = "vector"
-        reason = "Routed to vector for direct factual lookup."
 
     if not standalone:
         standalone = question
 
-    log.append(f"route={route}: {reasoning or reason}")
     if standalone != question:
         log.append(f"rewrote question for retrieval: {standalone}")
+        if reasoning:
+            log.append(f"rewrite reasoning: {reasoning}")
+    else:
+        log.append("question was already self-contained; searched as written")
 
-    return {
-        **state,
-        "route": route,
-        "search_question": standalone,
-        "decision_log": log,
-    }
+    return {**state, "standalone_question": standalone, "decision_log": log}
 
 
-def vector_search(state: AgentState) -> AgentState:
+def retrieve(state: AgentState) -> AgentState:
+    """Hybrid search, cross-encoder rerank, relevance floor. No LLM call."""
     _ensure_stores()
     assert _index is not None and _turns is not None
-    question = state.get("search_question") or state["question"]
-    hits = hybrid_search(_index, question, k=20)
-    reranked = rerank_with_threshold(
+
+    question = state.get("standalone_question") or state["question"]
+    candidates = hybrid_search(_index, question, k=CANDIDATE_K)
+    hits = rerank_with_threshold(
         question,
-        [tid for tid, _ in hits],
+        [tid for tid, _ in candidates],
         _turns,
-        top_n=5,
+        top_n=TOP_N,
     )
+
     by_id = {turn_id(t): t for t in _turns}
     documents: list[str] = []
-    for tid, _score in reranked:
+    for tid, _score in hits:
         turn = by_id.get(tid)
         if turn is None:
             continue
         documents.append(
             f"[{tid}] line {turn.line_number} | {turn.speaker}: {turn.text}"
         )
+
     log = list(state.get("decision_log") or [])
     if documents:
-        log.append(f"vector_search: retrieved {len(documents)} chunks above relevance floor")
-    else:
         log.append(
-            "vector_search: no chunk cleared the relevance floor; "
-            "question looks outside the corpus"
+            f"retrieve: {len(candidates)} candidates -> {len(documents)} chunks "
+            f"above the relevance floor (top score {hits[0][1]:.2f})"
         )
-    return {**state, "documents": documents, "decision_log": log}
+        return {**state, "documents": documents, "decision_log": log}
 
-
-def graph_search(state: AgentState) -> AgentState:
-    _ensure_stores()
-    assert _graph is not None
-    question = state.get("search_question") or state["question"]
-    entities = find_entities(_graph, question)
-    _sub, facts = local_search(_graph, entities, hops=2)
-    log = list(state.get("decision_log") or [])
+    # Nothing cleared the floor. The answer is set here rather than in a node
+    # of its own so the graph can route straight to END without an LLM call;
+    # generate() repeats the guard for callers that invoke it directly.
     log.append(
-        f"graph_search: matched {len(entities)} entities, "
-        f"returned {len(facts)} relation facts"
+        "retrieve: no chunk cleared the relevance floor; "
+        "question looks outside the corpus"
     )
-    if facts:
-        return {**state, "documents": facts, "decision_log": log}
-
-    # The router sends a question to one store only. When the graph has no
-    # path for it, answering "no evidence" would be wrong if the vector index
-    # holds the answer, so fall back rather than decline.
-    log.append("graph_search: no relation facts; falling back to vector retrieval")
-    fallback = vector_search({**state, "decision_log": log})
-    return {**fallback, "route": "graph->vector"}
+    return {
+        **state,
+        "documents": [],
+        "answer": ABSTAIN_ANSWER,
+        "decision_log": log,
+    }
 
 
 def generate(state: AgentState) -> AgentState:
+    """Answer from the retrieved documents only. One LLM call, or none."""
     docs = state.get("documents") or []
+    log = list(state.get("decision_log") or [])
     if not docs:
-        answer = (
-            "I could not find supporting evidence in the retrieved documents, "
-            "so I will not guess."
-        )
-        log = list(state.get("decision_log") or [])
-        log.append("generate: no documents; declined to guess")
-        return {**state, "answer": answer, "decision_log": log}
+        log.append("generate: no documents; declined to guess (0 API calls)")
+        return {**state, "answer": ABSTAIN_ANSWER, "decision_log": log}
 
     doc_block = "\n".join(f"- {d}" for d in docs)
     history_block = _history_block(state.get("history") or [], 4)
     prompt = (
         "Answer the question using ONLY the documents below. "
-        "Cite evidence inline as (meeting_id line N) when the document "
-        "includes a meeting/line reference, or use the turn/citation already "
-        "present in the document. If the documents are insufficient, say so.\n\n"
+        "Cite evidence inline as (meeting_id line N), taking both values from "
+        "the document you are citing. If the documents are insufficient, say "
+        "so instead of filling the gap.\n\n"
         "Use the conversation only to interpret what the question refers to; "
-        "never treat it as evidence.\n\n"
+        "it is never evidence and must never be cited.\n\n"
         f"Conversation so far:\n{history_block}\n\n"
         f"Question: {state['question']}\n\n"
         f"Documents:\n{doc_block}\n"
@@ -231,41 +217,33 @@ def generate(state: AgentState) -> AgentState:
             "Never invent facts. Use inline citations."
         ),
     )
-    log = list(state.get("decision_log") or [])
-    log.append("generate: answered from retrieved documents")
+    log.append(f"generate: answered from {len(docs)} retrieved documents")
     return {**state, "answer": answer.strip(), "decision_log": log}
 
 
-def _select_route(state: AgentState) -> Literal["vector_search", "graph_search"]:
-    if state.get("route") == "graph":
-        return "graph_search"
-    return "vector_search"
+def _has_documents(state: AgentState) -> Literal["generate", "abstain"]:
+    return "generate" if state.get("documents") else "abstain"
 
 
 def _build_app():
     graph = StateGraph(AgentState)
-    graph.add_node("route_question", route_question)
-    graph.add_node("vector_search", vector_search)
-    graph.add_node("graph_search", graph_search)
+    graph.add_node("prepare_question", prepare_question)
+    graph.add_node("retrieve", retrieve)
     graph.add_node("generate", generate)
 
-    graph.add_edge(START, "route_question")
+    graph.add_edge(START, "prepare_question")
+    graph.add_edge("prepare_question", "retrieve")
     graph.add_conditional_edges(
-        "route_question",
-        _select_route,
-        {
-            "vector_search": "vector_search",
-            "graph_search": "graph_search",
-        },
+        "retrieve",
+        _has_documents,
+        {"generate": "generate", "abstain": END},
     )
-    graph.add_edge("vector_search", "generate")
-    graph.add_edge("graph_search", "generate")
     graph.add_edge("generate", END)
     return graph.compile()
 
 
 def run(question: str, history: list[dict] | None = None) -> dict:
-    """Run the agent. Returns answer, documents, decision_log, route."""
+    """Run the agent. Returns answer, documents, decision_log, standalone_question."""
     global _app
     _ensure_stores()
     if _app is None:
@@ -274,9 +252,8 @@ def run(question: str, history: list[dict] | None = None) -> dict:
     final = _app.invoke(
         {
             "question": question,
-            "search_question": "",
             "history": history or [],
-            "route": "",
+            "standalone_question": "",
             "documents": [],
             "answer": "",
             "decision_log": [],
@@ -286,6 +263,5 @@ def run(question: str, history: list[dict] | None = None) -> dict:
         "answer": final.get("answer", ""),
         "documents": final.get("documents") or [],
         "decision_log": final.get("decision_log") or [],
-        "route": final.get("route", ""),
-        "search_question": final.get("search_question", ""),
+        "standalone_question": final.get("standalone_question", ""),
     }

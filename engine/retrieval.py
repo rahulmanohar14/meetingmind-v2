@@ -229,7 +229,7 @@ def rerank_with_threshold(
     Returns [] when nothing clears the floor, which lets the agent decline
     instead of answering from noise. Without this, hybrid_search returns `k`
     documents for any query at all, so the agent's "no supporting evidence"
-    path was unreachable on the vector route.
+    path was unreachable.
 
     Dropping the sub-floor tail also matters when the answer *is* present: the
     launch-date question retrieves one document at 6.7 and four below -9, and

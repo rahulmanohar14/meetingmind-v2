@@ -1,7 +1,8 @@
-"""Agent-level evals: multi-hop coverage (vector vs graph) and router accuracy.
+"""Agent-level evals: retrieval coverage and abstention.
 
-The retrieval arms make no LLM calls. Router accuracy makes one call per golden
-question through engine.llm.complete, cached on disk after the first run.
+Makes zero LLM calls. Both measurements live entirely on the retrieval path,
+which is local, so this script is free to rerun and the call count at the end
+is an assertion, not a note.
 
 Rebuilds the Chroma collection from data/ only, exactly like scripts/benchmark.py.
 Uploads in data/uploads/ are excluded from the index this writes; re-ingest or
@@ -22,63 +23,78 @@ if str(ROOT) not in sys.path:
 # Transcript and question text is not cp1252-safe on the Windows console.
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-from engine.agent import route_question
+from engine.agent import CANDIDATE_K, TOP_N
 from engine.corpus import load_corpus
-from engine.graph_store import find_entities, load_graph, local_search
 from engine.llm import get_call_count
 from engine.retrieval import (
     RELEVANCE_FLOOR,
     build_index,
     hybrid_search,
-    rerank,
     rerank_with_threshold,
 )
 
 EMBED_MODEL = "BAAI/bge-small-en-v1.5"
 PERSIST_DIR = ROOT / "data" / "chroma_db"
-GRAPH_PATH = ROOT / "data" / "graph.json"
 GOLDEN_PATH = ROOT / "eval" / "golden_set.json"
 OFF_TOPIC_PATH = ROOT / "eval" / "off_topic.json"
 PARAPHRASE_PATH = ROOT / "eval" / "paraphrases.json"
 RESULTS_PATH = ROOT / "benchmarks" / "agent_eval.md"
 
-# Mirror of the agent's vector path: hybrid k=20, cross-encoder rerank to 5.
-AGENT_CANDIDATES = 20
-AGENT_TOP_N = 5
-GENEROUS_TOP_N = 10
 
-# Expected route per question type. single_hop is a direct factual lookup;
-# multi_hop spans meetings and needs relation traversal.
-EXPECTED_ROUTE = {"single_hop": "vector", "multi_hop": "graph"}
-
-
-def _vector_turn_ids(index, question: str, top_n: int, thresholded: bool = True) -> list[str]:
-    """Turn ids from the vector path.
-
-    thresholded=True mirrors the agent exactly (relevance floor applied).
-    thresholded=False is the generous arm: every reranked hit, no floor, so
-    nobody can claim the vector comparison was rigged by truncation.
-    """
-    candidates = hybrid_search(index, question, k=AGENT_CANDIDATES)
-    ranker = rerank_with_threshold if thresholded else rerank
-    hits = ranker(
+def _agent_turn_ids(index, question: str) -> list[str]:
+    """Turn ids the agent's retrieve node would hand the generator."""
+    candidates = hybrid_search(index, question, k=CANDIDATE_K)
+    hits = rerank_with_threshold(
         question,
         [tid for tid, _ in candidates],
         index.turns,
-        top_n=top_n,
+        top_n=TOP_N,
     )
     return [tid for tid, _ in hits]
+
+
+def _coverage(retrieved, required: list[str]) -> tuple[float, float]:
+    """Return (full coverage 1/0, fraction of required turns found)."""
+    req = set(required)
+    if not req:
+        return 0.0, 0.0
+    found = req & set(retrieved)
+    full = 1.0 if found == req else 0.0
+    return full, len(found) / len(req)
 
 
 def _count_answered(index, questions: list[dict], label: str) -> int:
     """How many of these questions retrieve at least one document above the floor."""
     answered = 0
     for item in questions:
-        if _vector_turn_ids(index, item["question"], AGENT_TOP_N):
+        if _agent_turn_ids(index, item["question"]):
             answered += 1
         else:
             print(f"  [abstained] {label}: {item['question']}")
     return answered
+
+
+def _eval_coverage(index, questions: list[dict]) -> str:
+    n = len(questions)
+    rows = []
+    for item in questions:
+        retrieved = _agent_turn_ids(index, item["question"])
+        cov = _coverage(retrieved, item["answer_turn_ids"])
+        rows.append(cov)
+        flag = "ok " if cov[0] else "MISS"
+        print(f"  [{flag}] {item['question']}")
+        if not cov[0]:
+            print(f"         required={item['answer_turn_ids']} got={retrieved}")
+    full = int(sum(r[0] for r in rows))
+    partial = sum(r[1] for r in rows) / n if n else 0.0
+    return "\n".join(
+        [
+            "| arm | full coverage | mean partial coverage |",
+            "|---|---:|---:|",
+            f"| hybrid + rerank, top-{TOP_N} (agent path) | {full}/{n} | "
+            f"{partial:.2f} |",
+        ]
+    )
 
 
 def _eval_abstention(
@@ -99,7 +115,7 @@ def _eval_abstention(
 
     abstained_off = 0
     for item in off_topic:
-        if _vector_turn_ids(index, item["question"], AGENT_TOP_N):
+        if _agent_turn_ids(index, item["question"]):
             print(f"  [MISS] answered an off-topic question: {item['question']}")
         else:
             abstained_off += 1
@@ -124,155 +140,11 @@ def _eval_abstention(
     )
 
 
-def _graph_covered_turn_ids(graph, question: str) -> tuple[list[str], list[str], set[str]]:
-    """Entities seeded, relation facts returned, and the turn ids those facts cite.
-
-    Only edge source_turns count: graph_search passes relation facts to the
-    generator, so those citations are the evidence the model actually sees.
-    """
-    entities = find_entities(graph, question)
-    sub, facts = local_search(graph, entities, hops=2)
-    covered: set[str] = set()
-    for _src, _tgt, attrs in sub.edges(data=True):
-        covered.update(attrs.get("source_turns") or [])
-    return entities, facts, covered
-
-
-def _coverage(retrieved, required: list[str]) -> tuple[float, float]:
-    """Return (full coverage 1/0, fraction of required turns found)."""
-    req = set(required)
-    if not req:
-        return 0.0, 0.0
-    found = req & set(retrieved)
-    full = 1.0 if found == req else 0.0
-    return full, len(found) / len(req)
-
-
-def _summarise(rows: list[tuple[float, float]], n: int) -> tuple[str, float]:
-    full = int(sum(r[0] for r in rows))
-    partial = sum(r[1] for r in rows) / n if n else 0.0
-    return f"{full}/{n}", partial
-
-
-def _eval_multi_hop(index, graph, questions: list[dict]) -> tuple[str, list[dict]]:
-    n = len(questions)
-    agent_rows: list[tuple[float, float]] = []
-    generous_rows: list[tuple[float, float]] = []
-    graph_rows: list[tuple[float, float]] = []
-    detail: list[dict] = []
-
-    for item in questions:
-        question = item["question"]
-        required = item["answer_turn_ids"]
-
-        agent_ids = _vector_turn_ids(index, question, AGENT_TOP_N)
-        generous_ids = _vector_turn_ids(
-            index, question, GENEROUS_TOP_N, thresholded=False
-        )
-        entities, facts, graph_ids = _graph_covered_turn_ids(graph, question)
-
-        agent_cov = _coverage(agent_ids, required)
-        generous_cov = _coverage(generous_ids, required)
-        graph_cov = _coverage(graph_ids, required)
-
-        agent_rows.append(agent_cov)
-        generous_rows.append(generous_cov)
-        graph_rows.append(graph_cov)
-
-        print(f"\n=== {question}")
-        print(f"  required turns : {required}")
-        print(f"  vector top-{AGENT_TOP_N}   : {agent_ids}")
-        print(f"    full={agent_cov[0]:.0f} partial={agent_cov[1]:.2f}")
-        print(f"  vector top-{GENEROUS_TOP_N}  : {generous_ids}")
-        print(f"    full={generous_cov[0]:.0f} partial={generous_cov[1]:.2f}")
-        print(f"  graph seeds     : {len(entities)} entities, {len(facts)} facts")
-        print(f"    cited turns={sorted(graph_ids)}")
-        print(f"    full={graph_cov[0]:.0f} partial={graph_cov[1]:.2f}")
-
-        detail.append(
-            {
-                "question": question,
-                "required": required,
-                "vector_partial": agent_cov[1],
-                "graph_partial": graph_cov[1],
-                "graph_entities": len(entities),
-                "graph_facts": len(facts),
-            }
-        )
-
-    agent_full, agent_partial = _summarise(agent_rows, n)
-    generous_full, generous_partial = _summarise(generous_rows, n)
-    graph_full, graph_partial = _summarise(graph_rows, n)
-
-    table = "\n".join(
-        [
-            "| arm | full coverage | mean partial coverage |",
-            "|---|---:|---:|",
-            f"| vector, hybrid+rerank top-{AGENT_TOP_N} (agent path) | "
-            f"{agent_full} | {agent_partial:.2f} |",
-            f"| vector, hybrid+rerank top-{GENEROUS_TOP_N} (generous) | "
-            f"{generous_full} | {generous_partial:.2f} |",
-            f"| graph, 2-hop relation facts | {graph_full} | {graph_partial:.2f} |",
-        ]
-    )
-    return table, detail
-
-
-def _eval_single_hop(index, questions: list[dict]) -> str:
-    n = len(questions)
-    rows = [
-        _coverage(_vector_turn_ids(index, q["question"], AGENT_TOP_N), q["answer_turn_ids"])
-        for q in questions
-    ]
-    full, partial = _summarise(rows, n)
-    return "\n".join(
-        [
-            "| arm | full coverage | mean partial coverage |",
-            "|---|---:|---:|",
-            f"| vector, hybrid+rerank top-{AGENT_TOP_N} (agent path) | "
-            f"{full} | {partial:.2f} |",
-        ]
-    )
-
-
-def _eval_router(questions: list[dict]) -> str:
-    by_expected: dict[str, list[bool]] = {"vector": [], "graph": []}
-
-    for item in questions:
-        expected = EXPECTED_ROUTE[item["type"]]
-        state = route_question(
-            {
-                "question": item["question"],
-                "search_question": "",
-                "history": [],
-                "route": "",
-                "documents": [],
-                "answer": "",
-                "decision_log": [],
-            }
-        )
-        actual = state.get("route", "")
-        by_expected[expected].append(actual == expected)
-        flag = "ok " if actual == expected else "MISS"
-        print(f"  [{flag}] expected={expected} actual={actual or '(none)'} | {item['question']}")
-
-    lines = [
-        "| expected route | questions | correct | accuracy |",
-        "|---|---:|---:|---:|",
-    ]
-    total = 0
-    correct = 0
-    for expected in ("vector", "graph"):
-        results = by_expected[expected]
-        n = len(results)
-        hits = sum(results)
-        total += n
-        correct += hits
-        acc = hits / n if n else 0.0
-        lines.append(f"| {expected} | {n} | {hits} | {acc:.2f} |")
-    overall = correct / total if total else 0.0
-    lines.append(f"| **overall** | {total} | {correct} | **{overall:.2f}** |")
-    return "\n".join(lines)
+def _load_questions(path: Path) -> list[dict]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(data, list) or not data:
+        raise ValueError(f"Expected a non-empty JSON array in {path}")
+    return data
 
 
 def main() -> None:
@@ -281,71 +153,36 @@ def main() -> None:
     turns = load_corpus(ROOT / "data")
     if not turns:
         raise RuntimeError(f"No transcripts found in {ROOT / 'data'}")
-    if not GRAPH_PATH.exists():
-        raise RuntimeError(f"Missing {GRAPH_PATH}; run scripts/build_graph.py first")
 
-    golden = json.loads(GOLDEN_PATH.read_text(encoding="utf-8"))
-    if not isinstance(golden, list):
-        raise ValueError(f"Expected a JSON array in {GOLDEN_PATH}")
-
-    single_hop = [q for q in golden if q.get("type") == "single_hop"]
-    multi_hop = [q for q in golden if q.get("type") == "multi_hop"]
-    if not multi_hop:
-        raise RuntimeError("No multi_hop questions found in the golden set")
+    golden = _load_questions(GOLDEN_PATH)
+    off_topic = _load_questions(OFF_TOPIC_PATH)
+    paraphrases = _load_questions(PARAPHRASE_PATH)
 
     print(f"Building index with {EMBED_MODEL} ...")
     index = build_index(turns, EMBED_MODEL, PERSIST_DIR)
-    graph = load_graph(GRAPH_PATH)
-    print(
-        f"Indexed turns: {len(index.turn_ids)} | "
-        f"graph: {graph.number_of_nodes()} nodes, {graph.number_of_edges()} edges"
-    )
+    print(f"Indexed turns: {len(index.turn_ids)}")
 
-    print(f"\n--- multi-hop coverage ({len(multi_hop)} questions) ---")
-    multi_table, _detail = _eval_multi_hop(index, graph, multi_hop)
-
-    print(f"\n--- single-hop sanity check ({len(single_hop)} questions) ---")
-    single_table = _eval_single_hop(index, single_hop)
-
-    off_topic = json.loads(OFF_TOPIC_PATH.read_text(encoding="utf-8"))
-    if not isinstance(off_topic, list) or not off_topic:
-        raise ValueError(f"Expected a non-empty JSON array in {OFF_TOPIC_PATH}")
-    paraphrases = json.loads(PARAPHRASE_PATH.read_text(encoding="utf-8"))
-    if not isinstance(paraphrases, list) or not paraphrases:
-        raise ValueError(f"Expected a non-empty JSON array in {PARAPHRASE_PATH}")
+    print(f"\n--- retrieval coverage ({len(golden)} golden questions) ---")
+    coverage_table = _eval_coverage(index, golden)
 
     print(f"\n--- abstention (relevance floor {RELEVANCE_FLOOR}) ---")
     abstention_table = _eval_abstention(index, golden, paraphrases, off_topic)
 
-    print(f"\n--- router accuracy ({len(golden)} questions) ---")
-    router_table = _eval_router(golden)
-
     body = "\n\n".join(
         [
             "# Agent evals",
-            "Full coverage means every turn id the question needs was retrieved; "
-            "partial coverage is the mean fraction retrieved. The vector arms "
-            "mirror the agent's vector path (hybrid k=20 then cross-encoder "
-            "rerank). The graph arm counts the turn ids cited by the relation "
-            "facts that `graph_search` hands the generator.",
-            f"## Multi-hop coverage ({len(multi_hop)} questions)",
-            multi_table,
-            f"## Single-hop coverage ({len(single_hop)} questions)",
-            single_table,
+            "The agent has one retrieval path: hybrid fusion to "
+            f"{CANDIDATE_K} candidates, cross-encoder rerank to {TOP_N}, then "
+            "the relevance floor. Full coverage means every turn id the "
+            "question needs was retrieved; partial coverage is the mean "
+            "fraction retrieved.",
+            f"## Retrieval coverage ({len(golden)} questions)",
+            coverage_table,
             "## Abstention",
-            "The vector route passes the generator only documents scoring at "
-            f"least {RELEVANCE_FLOOR} on the cross-encoder, and abstains when "
-            "none clear it. The value sits in the measured gap between natural "
-            "in-corpus phrasings (down to -5.0 at top-1) and off-topic "
-            "questions (up to -9.7).",
+            "The agent passes the generator only documents scoring at least "
+            f"{RELEVANCE_FLOOR} on the cross-encoder, and abstains without an "
+            "API call when none clear it.",
             abstention_table,
-            f"## Router accuracy ({len(golden)} questions)",
-            "Expected route is derived from the golden set question type: "
-            "`single_hop` -> vector, `multi_hop` -> graph.",
-            router_table,
-            "Sample sizes are small (12 single-hop, 5 multi-hop): one question "
-            "moves single-hop metrics by 0.08 and multi-hop metrics by 0.20, so "
-            "differences of a single question are not meaningful.",
         ]
     )
 
@@ -356,7 +193,11 @@ def main() -> None:
     RESULTS_PATH.write_text(body + "\n", encoding="utf-8")
     print(f"\nWrote {RESULTS_PATH}")
     print(f"Total runtime: {time.perf_counter() - started:.1f}s")
-    print(f"LLM API calls made: {get_call_count()}")
+
+    calls = get_call_count()
+    print(f"LLM API calls made: {calls} (expected 0)")
+    if calls:
+        raise RuntimeError(f"Expected 0 API calls on the retrieval path, made {calls}")
 
 
 if __name__ == "__main__":

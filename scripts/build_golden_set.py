@@ -1,14 +1,8 @@
 """Generate a single-hop golden question set from the meeting corpus.
 
-After this script runs, hand-append about 5 multi_hop questions to
-eval/golden_set.json. Those entries use the same schema with
-type="multi_hop" and answer_turn_ids that may span multiple meetings, e.g.:
-
-    {
-      "question": "...",
-      "answer_turn_ids": ["meeting_week1:8", "meeting_week2:3"],
-      "type": "multi_hop"
-    }
+Every question is answerable from exactly one turn. The script prints each
+question next to the turn it was generated from so the set can be reviewed by
+hand before it is trusted as ground truth.
 """
 
 from __future__ import annotations
@@ -107,28 +101,15 @@ def main() -> None:
             if len(collected) >= TARGET_QUESTIONS:
                 break
 
-    # Keep any hand-added multi_hop entries already present in the file.
-    preserved_multi_hop: list[dict] = []
-    if OUT_PATH.exists():
-        existing = json.loads(OUT_PATH.read_text(encoding="utf-8"))
-        if not isinstance(existing, list):
-            raise ValueError(f"Expected a JSON array in {OUT_PATH}")
-        for item in existing:
-            if isinstance(item, dict) and item.get("type") == "multi_hop":
-                preserved_multi_hop.append(item)
-
-    output = collected + preserved_multi_hop
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with OUT_PATH.open("w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
+        json.dump(collected, f, ensure_ascii=False, indent=2)
         f.write("\n")
 
     print(f"Wrote {len(collected)} single_hop questions to {OUT_PATH}")
-    if preserved_multi_hop:
-        print(f"Preserved {len(preserved_multi_hop)} existing multi_hop questions")
     print(f"API calls used: {get_call_count()}")
     print()
-    # Hand-edit next: append ~5 multi_hop items (see module docstring).
+    # Review each question against its source turn before trusting the set.
     for i, item in enumerate(collected, start=1):
         tid = item["answer_turn_ids"][0]
         turn = by_id[tid]

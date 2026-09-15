@@ -32,18 +32,23 @@ mcp = MCPServer(
     "meetingmind",
     instructions=(
         "MeetingMind answers questions over meeting transcripts using hybrid "
-        "vector retrieval and a knowledge graph. Prefer ask_meeting for Q&A."
+        "retrieval with a cross-encoder rerank. Prefer ask_meeting for Q&A."
     ),
 )
 
 
-@mcp.tool(description="Ask a question over the indexed meetings (routes vector vs graph).")
+@mcp.tool(
+    description=(
+        "Ask a question over the indexed meetings. Answers are grounded in "
+        "retrieved turns and cited; abstains when nothing relevant is found."
+    )
+)
 def ask_meeting(question: str) -> str:
     result = run(question)
     return json.dumps(
         {
             "answer": result.get("answer", ""),
-            "route": result.get("route", ""),
+            "standalone_question": result.get("standalone_question", ""),
             "decision_log": result.get("decision_log") or [],
             "documents": result.get("documents") or [],
         },

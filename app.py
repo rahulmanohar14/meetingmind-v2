@@ -15,7 +15,6 @@ if str(ROOT) not in sys.path:
 from engine.agent import run
 from engine.corpus import load_full_corpus
 from engine.db import list_meetings, seed_demo_meetings
-from engine.graph_store import load_graph
 from engine.ingest import ingest_upload, reset_uploads, save_upload
 
 _VECTOR_DOC = re.compile(
@@ -24,10 +23,10 @@ _VECTOR_DOC = re.compile(
 
 
 @st.cache_resource
-def _sidebar_stats() -> tuple[int, int, int]:
+def _sidebar_stats() -> tuple[int, int]:
     turns = load_full_corpus(ROOT / "data", ROOT / "data" / "uploads")
-    graph = load_graph(ROOT / "data" / "graph.json")
-    return len(turns), graph.number_of_nodes(), graph.number_of_edges()
+    meetings = {t.meeting_id for t in turns}
+    return len(turns), len(meetings)
 
 
 def _history_pairs(messages: list[dict]) -> list[dict]:
@@ -48,9 +47,6 @@ def _format_source(doc: str) -> str:
 
 def _render_assistant(message: dict) -> None:
     st.markdown(message["content"])
-    route = message.get("route") or ""
-    if route:
-        st.caption(f"Routed to **{route}**")
     documents = message.get("documents") or []
     if documents:
         st.markdown("**Sources**")
@@ -67,11 +63,10 @@ def _render_assistant(message: dict) -> None:
 
 def _render_sidebar() -> None:
     seed_demo_meetings(ROOT / "data")
-    turn_count, node_count, edge_count = _sidebar_stats()
+    turn_count, meeting_count = _sidebar_stats()
     st.title("MeetingMind")
     st.write(f"Indexed turns: {turn_count}")
-    st.write(f"Graph nodes: {node_count}")
-    st.write(f"Graph edges: {edge_count}")
+    st.write(f"Meetings: {meeting_count}")
 
     st.divider()
     st.subheader("Upload")
@@ -93,8 +88,7 @@ def _render_sidebar() -> None:
             status.success(
                 f"Ingested {result['meeting_id']}: "
                 f"{result['new_turns']} new turns, "
-                f"{result['indexed_turns']} indexed, "
-                f"{result['nodes']} nodes / {result['edges']} edges"
+                f"{result['indexed_turns']} indexed"
             )
             st.rerun()
         except Exception as exc:
@@ -111,10 +105,7 @@ def _render_sidebar() -> None:
         try:
             result = reset_uploads(status_callback=lambda msg: status.info(msg))
             st.cache_resource.clear()
-            status.success(
-                f"Reset done: {result['indexed_turns']} turns, "
-                f"{result['nodes']} nodes / {result['edges']} edges"
-            )
+            status.success(f"Reset done: {result['indexed_turns']} turns indexed")
             st.rerun()
         except Exception as exc:
             status.error(f"Reset failed: {exc}")
@@ -166,7 +157,6 @@ def main() -> None:
             "content": prompt,
             "documents": [],
             "decision_log": [],
-            "route": "",
         }
     )
     with st.chat_message("user"):
@@ -181,7 +171,6 @@ def main() -> None:
             "content": result["answer"],
             "documents": result.get("documents") or [],
             "decision_log": result.get("decision_log") or [],
-            "route": result.get("route") or "",
         }
         _render_assistant(assistant_msg)
     st.session_state.messages.append(assistant_msg)

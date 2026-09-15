@@ -9,3 +9,5 @@ data/uploads/
 data/meetingmind.db
 *.mp4
 *.zip
+.claude/settings.local.json
+docs/

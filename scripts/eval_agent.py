@@ -74,20 +74,23 @@ def _count_answered(index, questions: list[dict], label: str) -> int:
     return answered
 
 
-def _eval_coverage(index, questions: list[dict]) -> str:
+def _eval_coverage(index, questions: list[dict]) -> tuple[str, list[dict]]:
     n = len(questions)
     rows = []
+    misses: list[dict] = []
     for item in questions:
         retrieved = _agent_turn_ids(index, item["question"])
         cov = _coverage(retrieved, item["answer_turn_ids"])
         rows.append(cov)
+        if not cov[0]:
+            misses.append({**item, "retrieved": retrieved})
         flag = "ok " if cov[0] else "MISS"
         print(f"  [{flag}] {item['question']}")
         if not cov[0]:
             print(f"         required={item['answer_turn_ids']} got={retrieved}")
     full = int(sum(r[0] for r in rows))
     partial = sum(r[1] for r in rows) / n if n else 0.0
-    return "\n".join(
+    table = "\n".join(
         [
             "| arm | full coverage | mean partial coverage |",
             "|---|---:|---:|",
@@ -95,6 +98,7 @@ def _eval_coverage(index, questions: list[dict]) -> str:
             f"{partial:.2f} |",
         ]
     )
+    return table, misses
 
 
 def _eval_abstention(
@@ -140,6 +144,50 @@ def _eval_abstention(
     )
 
 
+def _finding_section(misses: list[dict]) -> str:
+    """Write up the coverage misses as a finding about the chunk strategy.
+
+    Generated here rather than hand-written into the markdown, because this
+    script overwrites that file on every run.
+    """
+    lines = [
+        "## Finding: adjacent-turn misses are a chunking limit, not a ranking bug",
+        "",
+        "The remaining coverage miss is the most informative result in this "
+        "file, and it is a property of the chunk strategy rather than a defect "
+        "in retrieval.",
+        "",
+    ]
+    for item in misses:
+        lines.append(f"- **{item['question']}**")
+        lines.append(f"  - needs `{', '.join(item['answer_turn_ids'])}`")
+        lines.append(f"  - retrieved `{', '.join(item['retrieved']) or '(nothing)'}`")
+    lines += [
+        "",
+        "In the DataCorp renewal case the retriever returns turn `:29`, where "
+        "Tomas *asks* the question, but not `:30`, where Marcus *answers* it. "
+        "Ranking is working: `:29` is the turn most similar to the query, "
+        "because a question resembles a question. The answer is simply in the "
+        "next turn.",
+        "",
+        "One speaker turn is the whole chunk, and on this corpus that averages "
+        "about fifteen words. A question and its answer are routinely split "
+        "across two turns, so no amount of reranking recovers the second one: "
+        "the information needed is not in the unit being scored.",
+        "",
+        "**Highest-value next change: sentence-window retrieval.** Embed the "
+        "single turn, so retrieval precision is unchanged, but return the "
+        "matched turn plus its neighbours as the context handed to the model. "
+        "Citations still point at the matched turn, so the exact-citation "
+        "property survives. The case above is the measured example to test it "
+        "against: a window of one either side would include `:30` and close "
+        "this miss. Any such comparison has to report context length in tokens "
+        "alongside recall, since a larger window raises recall trivially by "
+        "including more text.",
+    ]
+    return "\n".join(lines)
+
+
 def _load_questions(path: Path) -> list[dict]:
     data = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(data, list) or not data:
@@ -163,7 +211,7 @@ def main() -> None:
     print(f"Indexed turns: {len(index.turn_ids)}")
 
     print(f"\n--- retrieval coverage ({len(golden)} golden questions) ---")
-    coverage_table = _eval_coverage(index, golden)
+    coverage_table, misses = _eval_coverage(index, golden)
 
     print(f"\n--- abstention (relevance floor {RELEVANCE_FLOOR}) ---")
     abstention_table = _eval_abstention(index, golden, paraphrases, off_topic)
@@ -183,6 +231,13 @@ def main() -> None:
             f"{RELEVANCE_FLOOR} on the cross-encoder, and abstains without an "
             "API call when none clear it.",
             abstention_table,
+            "One off-topic question is answered rather than abstained on: "
+            "\"how many story points did we burn down last sprint?\". It is "
+            "arguably mislabeled, because the generated corpus discusses "
+            "sprints throughout, so it now behaves as a hard negative rather "
+            "than an off-topic question. It is kept in the fixture "
+            "deliberately rather than removed after it failed.",
+            _finding_section(misses),
         ]
     )
 

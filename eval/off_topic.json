@@ -25,6 +25,6 @@
   },
   {
     "question": "How many story points did we burn down last sprint?",
-    "note": "agile vocabulary absent from this corpus"
+    "note": "Arguably mislabeled now that the generated corpus discusses sprints throughout, so it functions as a hard negative rather than an off-topic question. Kept in the fixture deliberately rather than removed after it failed."
   }
 ]

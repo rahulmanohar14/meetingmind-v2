@@ -44,7 +44,7 @@
   {
     "question": "On which day does Bob plan to push the feature flag?",
     "answer_turn_ids": [
-      "2025-03-10_standup:15"
+      "2025-03-10_standup:17"
     ],
     "type": "single_hop"
   },

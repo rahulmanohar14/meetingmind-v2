@@ -1,16 +1,46 @@
-1. Alice: I finally got to that trail run on Saturday, but let’s focus—who’s taking ownership of the internal‑only release and what’s the target day?
-2. Bob: honestly, if we spin up the staging flag set on Friday, we could have a sandbox ready by Monday.
-3. Priya: ORI‑412 is still open, and it blocks the data‑ingest pipeline; that’s two sprints, not one.
-4. Sarah: I don’t want to overpromise on timing, but the compliance thing still needs the a11y findings reviewed.
-5. Marcus: I can’t commit to that timeline without the vendor amendment signed, and I’ll need five business days to get it back.
-6. Danny: I ran it twice and got two different answers on the login flow integration test.
-7. Bob: hang on— the flaky test is probably due to the feature flag toggle being off in the CI env—
-8. Alice: Let’s park that discussion on the flaky test for now and move to the release checklist.
-9. Priya: Who’s blocked on the flag rollout? I need to know so I can reassign.
-10. Bob: the flag owner is me, and I’ll push the toggle by Thursday.
-11. Sarah: The audit vendor just emailed; they’re pushing the review to next Thursday, that’s the third reschedule.
-12. Marcus: Still nothing on the DataCorp signature; I chased them again Tuesday and they said they’re reviewing.
-13. Alice: I don’t want to guess today, but we need a go‑live day for the internal launch—maybe the 28th?
-14. Danny: the flaky login still spikes on the nightly build, and the test flaps when the flag is toggled—
-15. Bob: two more sprints, realistically, to finish the API key work and get the contract cleared.
-16. Priya: That’s a hard stop; if we wait past the
+1. Alice: Quick personal note—my son’s recital was today, so I’m a bit behind on email, but let’s get to the go‑live decision.
+2. Bob: Honestly, the platform load simulation from March 31 still shows we’re hitting 95 % of our target CPU on the new reporting pipeline.
+3. Priya: That’s ORI‑412 still open, and it’s been sitting there for two sprints.
+4. Sarah: I don’t want to overpromise on timing for the a11y work, but the compliance vendor just told us they’ll be free next Thursday.
+5. Danny: I ran the integration suite twice and got two different answers on the DataCorp key test.
+6. Marcus: I can’t commit to a date until we have the signed amendment from the vendor, and I need that in writing before Friday.
+7. Bob: Hang on—if we toggle the new flag on the staging tier, we could isolate the flaky test that Danny mentioned.
+8. Alice: Let’s park the flag discussion for now; I need an owner for the internal‑only release and a date.
+9. Priya: Who’s blocked on the internal release? I see the build pipeline is green, but the config rollout is pending.
+10. Sarah: The same thing we talked about last week with the checkout flow—there’s a missing alt‑text label on the filter panel.
+11. Bob: Two more sprints, realistically, to get the flag gating fully baked.
+12. Danny: The flaky test is on the DataCorp integration, and it’s hitting the same timeout as before.
+13. Marcus: Still nothing from DataCorp after the follow‑up I sent on Tuesday, and I’ll chase them again Friday.
+14. Alice: I’ll sync with legal on that and aim to have an update by next Thursday.
+15. Priya: That’s two weeks from now, not one, so we can’t push the internal release past the 28th.
+16. Bob: Actually, the load test for the 28th shows we’re at 88 % capacity, which is okay if we keep the flag off.
+17. Sarah: The audit findings are still pending, but the vendor said they’ll resend the report tomorrow morning.
+18. Danny: I’ll keep an eye on the flaky test, but I think we need a dedicated flag to toggle the DataCorp mock.
+19. Marcus: I’d want that in writing before we rely on a mock for the go‑live.
+20. Alice: So we’re doing an internal‑only release on the 28th, with the flag off, and I’ll own the legal sync.
+21. Bob: Yeah, that’s the plan—but I’m still worried about regression on the analytics dashboard.
+22. Priya: That regression risk is tied to ORI‑412, which I can prioritize if we lock the date.
+23. Sarah: The accessibility audit still needs a pass on the new chart component before we can call it done.
+24. Danny: The flaky test might be a timing issue with the mock server; I’ll add a retry and see if it stabilizes.
+25. Marcus: I’ll need a written sign‑off from the vendor by Friday to unblock the production keys.
+26. Alice: I’ll leave it with me to get that signature and will email the team by next Thursday.
+27. Bob: Honestly—if we hit a snag on the 27th, we can push the internal release to the 29th, but that cuts into the buffer.
+28. Priya: That’s not ideal; we only have two days left in the sprint.
+29. Sarah: The compliance thing we mentioned on March 24 still hasn’t been assigned, so I’m not sure we can certify the new flow by then.
+30. Danny: I’ll run the integration suite again after I add the retry; if it still flakes, we’ll need a hotfix.
+31. Marcus: I can’t guarantee the contract will be signed by Friday; the vendor typically needs three business days after we send the amendment.
+32. Alice: Okay, so I’ll push for a Friday signature, and if we don’t get it, we’ll hold the internal release at the 28th with the flag off.
+33. Bob: That works, but I’ll need to add a feature flag for the new reporting endpoint—feature flags are the answer to everything, right?
+34. Priya: Yeah, just make sure the flag is behind a toggle in the config repo, not hard‑coded.
+35. Sarah: And double‑check that the a11y checklist is updated before the internal demo on Thursday.
+36. Danny: Still nothing conclusive on the flaky test, but I’ll keep monitoring.
+37. Marcus: I’ll follow up with DataCorp on Monday, count business days, and let you know.
+38. Alice: Let’s circle back on the budget after I hear back from finance on the extra cloud capacity for the 28th.
+39. Bob: Honestly, I’m pessimistic about launch week if we have to merge that flag at the last minute.
+40. Priya: That’s two sprints, not one, to get the flag fully tested, so we’re cutting it close.
+41. Sarah: I can’t promise the compliance check will be done by next Tuesday if the vendor delays again.
+42. Danny: I’ll add a note to the test run log about the flaky result and tag it as ORI‑412.
+43. Marcus: I’ll need that written amendment before I can sign off on the production keys.
+44. Alice: So we’re doing internal‑only on the 28th, flag off, legal sync by Thursday, and I’ll update the team next Friday.
+45. Bob: Yeah, that’s the three‑point checklist.
+46. Priya: Fine, I’ll keep the team on ORI‑412 and make sure it’s ready for the internal release.

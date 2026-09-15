@@ -1,0 +1,35 @@
+1. Alice: Good morning, folks, coffee’s finally working again.
+2. Sarah: Forty-one issues, six of them blocking.
+3. Danny: Ran the flaky test suite again—got two different results.
+4. Marcus: Still nothing on the legal sign‑off for the cloud spend.
+5. Elena: I’m still reconciling the Q2 numbers, so I can’t give a firm figure today.
+6. Alice: So, who’s taking the sign‑off on that audit remediation?
+7. Sarah: I’ll own it, but I can’t promise a date yet.
+8. Danny: The same test flakiness shows up on ORI-412 as well—maybe the mock data is stale.
+9. Marcus: I’d want that in writing before I approve any budget change.
+10. Elena: The partial approval came through for the extra capacity on Tuesday.
+11. Alice: Let’s park the rest of the budget discussion until we hear back from finance on the campaign spend.
+12. Sarah: The six blocking items are all in the checkout flow, same as we flagged last week.
+13. Danny: I tried to isolate the failure on ticket ATL-88 and still see intermittent timeouts.
+14. Marcus: I can’t commit to a timeline until the compliance vendor sends the final remediation checklist, which they said would be by Friday.
+15. Elena: The cloud capacity increase is slated for next Thursday, pending the ops queue.
+16. Alice: I don’t want to guess today, but we need to know when that can go live.
+17. Sarah: Once I have the sign‑off, I’ll push the fixes by the end of the week.
+18. Danny: Still nothing on the duplicate issue count—maybe we’re double‑counting some of those 41.
+19. Marcus: I’ll follow up with the vendor on Thursday, business day two after the Friday they mentioned.
+20. Elena: The approval queue is still stuck on the finance lead’s review, so I can’t move it forward.
+21. Alice: Okay, so we have cloud capacity approved for Thursday, audit remediation owned by Sarah, and the flaky tests still pending.
+22. Sarah: I’ll schedule a review of the six blockers for Wednesday morning.
+23. Danny: The test suite ran twice this morning, once it passed, once it failed—same pattern as last Monday.
+24. Marcus: I’ve sent a reminder to the compliance contact, but they’re out of office until next Tuesday.
+25. Elena: The spend number for the cloud bump is $12K, but the campaign budget is still on hold.
+26. Alice: Let’s circle back on the campaign spend after Elena gets the final numbers.
+27. Sarah: I’ll update the ticket ORI-412 with the remediation status by tomorrow.
+28. Danny: Still nothing on the integration test for the new API rate limit—maybe we need a fresh environment.
+29. Marcus: I can’t sign off on any release until the legal amendment is signed, which I estimate will take three business days after we get the final doc.
+30. Elena: The finance approval queue usually takes about five business days once we have the final numbers.
+31. Alice: I’ll leave the audit sign‑off with Sarah and expect a status by Friday.
+32. Sarah: That works as long as the compliance vendor sends the final report by Thursday.
+33. Danny: The flaky test might be a timing issue—maybe we should add a retry wrapper.
+34. Marcus: I’ll need the written sign‑off from compliance before I can give the green light on the cloud bump.
+35. Elena: I’ll push the numbers through the approval queue today and let you know if anything changes.

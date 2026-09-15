@@ -1,85 +1,197 @@
 [
   {
-    "question": "What is blocking production API keys?",
+    "question": "Who is preparing a rate-limit mitigation plan?",
+    "answer_turn_ids": [
+      "meeting_week1:8"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "Which vendor contract is still unsigned?",
     "answer_turn_ids": [
       "meeting_week1:1"
     ],
     "type": "single_hop"
   },
   {
-    "question": "What action item did Marcus commit to by Monday, April 28?",
+    "question": "Who is expected to send a status update by Monday, April 28?",
     "answer_turn_ids": [
       "meeting_week1:9"
     ],
     "type": "single_hop"
   },
   {
-    "question": "Why are budget approvals delayed, according to finance?",
+    "question": "How many pricing options are being discussed?",
     "answer_turn_ids": [
-      "meeting_week1:13"
+      "sample_transcript:7"
     ],
     "type": "single_hop"
   },
   {
-    "question": "What is the status of the accessibility audit?",
+    "question": "By when does Marcus plan to present the TOS and privacy addendum?",
     "answer_turn_ids": [
-      "meeting_week2:3"
+      "sample_transcript:12"
     ],
     "type": "single_hop"
   },
   {
-    "question": "What action item did Bob commit to by Wednesday, May 1?",
+    "question": "What deadline does Sarah mention for copy freeze?",
     "answer_turn_ids": [
-      "meeting_week2:8"
+      "sample_transcript:20"
     ],
     "type": "single_hop"
   },
   {
-    "question": "What was the decision regarding the release of beta seats?",
+    "question": "On which day does Bob plan to push the feature flag?",
     "answer_turn_ids": [
-      "meeting_week2:7"
+      "2025-03-10_standup:15"
     ],
     "type": "single_hop"
   },
   {
-    "question": "What action item did Marcus commit to by Wednesday, May 1?",
+    "question": "What does Marcus require before he can sign off any demo content?",
     "answer_turn_ids": [
-      "meeting_week3:9"
+      "2025-03-10_standup:26"
     ],
     "type": "single_hop"
   },
   {
-    "question": "Who will coordinate remediation sign-off once audit evidence arrives?",
+    "question": "By what day must the response to the DataCorp renewal notice be sent?",
     "answer_turn_ids": [
-      "meeting_week3:11"
+      "2025-03-10_standup:30"
     ],
     "type": "single_hop"
   },
   {
-    "question": "According to Alice, how many meetings have vendor, budget, audit, and API concerns persisted?",
+    "question": "What did Bob say about the squirrel?",
     "answer_turn_ids": [
-      "meeting_week3:15"
+      "2025-03-17_standup:1"
     ],
     "type": "single_hop"
   },
   {
-    "question": "How many business days does legal need to review the updated TOS?",
+    "question": "What did Marcus report about the vendor contract?",
     "answer_turn_ids": [
-      "sample_transcript:6"
+      "2025-03-17_standup:2"
     ],
     "type": "single_hop"
   },
   {
-    "question": "When will Bob have the feature flag and rollout checklist ready?",
+    "question": "What was Elena's status on the Q1 numbers?",
     "answer_turn_ids": [
-      "sample_transcript:11"
+      "2025-03-17_standup:3"
     ],
     "type": "single_hop"
   },
   {
-    "question": "What is the agreed-upon launch date for the beta version?",
+    "question": "Who will prototype the flag for ATL‑88?",
     "answer_turn_ids": [
-      "sample_transcript:19"
+      "2025-03-27_atlas_review:13"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "At which step is the approval queue currently?",
+    "answer_turn_ids": [
+      "2025-03-27_atlas_review:6"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "By when can Elena look at the proration model?",
+    "answer_turn_ids": [
+      "2025-03-27_atlas_review:11"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "When does Marcus say he will have a draft of the amendment?",
+    "answer_turn_ids": [
+      "2025-03-28_allhands:19"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "Which ticket number contains the flaky test mentioned by Danny?",
+    "answer_turn_ids": [
+      "2025-03-28_allhands:23"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "What does Bob say is required to define the migration scope?",
+    "answer_turn_ids": [
+      "2025-03-28_allhands:27"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "When did the a11y audit vendor send the contract?",
+    "answer_turn_ids": [
+      "2025-04-07_standup:3"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "How many sprints are needed for the feature flag scaffolding, according to Bob?",
+    "answer_turn_ids": [
+      "2025-04-07_standup:7"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "By which day will Bob have a prototype of the feature flag toggle?",
+    "answer_turn_ids": [
+      "2025-04-07_standup:12"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "In which ticket does Danny plan to document the flaky case?",
+    "answer_turn_ids": [
+      "2025-04-10_orion_review:39"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "Who is assigned to the integration and what is the deadline?",
+    "answer_turn_ids": [
+      "2025-04-10_orion_review:30"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "According to Alice, how has the migration estimate changed?",
+    "answer_turn_ids": [
+      "2025-04-24_atlas_review:3"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "Which accounts are asking if the new onboarding flow will be live by the 28th?",
+    "answer_turn_ids": [
+      "2025-04-25_allhands:14"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "What does Nina say about the telemetry’s ability to capture API key usage?",
+    "answer_turn_ids": [
+      "2025-04-25_allhands:15"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "According to Bob, at what percentage of projected traffic did the load test hit the throttling threshold?",
+    "answer_turn_ids": [
+      "2025-04-25_allhands:27"
+    ],
+    "type": "single_hop"
+  },
+  {
+    "question": "Who will add a note to the test run log about the flaky result and tag it as ORI‑412?",
+    "answer_turn_ids": [
+      "2025-05-08_orion_review:41"
     ],
     "type": "single_hop"
   }

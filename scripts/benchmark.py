@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from engine.corpus import load_corpus
+from engine.corpus import load_demo_corpus
 from engine.llm import get_call_count
 from engine.retrieval import (
     bm25_search,
@@ -119,7 +119,7 @@ def _format_table(rows: list[dict]) -> str:
 
 def main() -> None:
     started = time.perf_counter()
-    turns = load_corpus(ROOT / "data")
+    turns = load_demo_corpus(ROOT / "data")
     if not turns:
         raise RuntimeError(f"No transcripts found in {ROOT / 'data'}")
 

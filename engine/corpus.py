@@ -53,17 +53,33 @@ def load_corpus(directory: str | Path) -> list[Turn]:
     return turns
 
 
+def load_demo_corpus(data_dir: str | Path | None = None) -> list[Turn]:
+    """Load the demo corpus: transcripts in data/ plus data/meetings/.
+
+    The four original hand-written transcripts sit directly in data/; the
+    generated six-month corpus sits in data/meetings/. Both are demo content,
+    so everything that indexes or evaluates the corpus needs both.
+    """
+    root = Path(__file__).resolve().parents[1]
+    data_dir = Path(data_dir) if data_dir is not None else root / "data"
+    turns = load_corpus(data_dir)
+    meetings_dir = data_dir / "meetings"
+    if meetings_dir.is_dir():
+        turns.extend(load_corpus(meetings_dir))
+    return turns
+
+
 def load_full_corpus(
     data_dir: str | Path | None = None,
     uploads_dir: str | Path | None = None,
 ) -> list[Turn]:
-    """Load demo transcripts from data/ plus any files in data/uploads/."""
+    """The demo corpus plus any uploaded transcripts."""
     root = Path(__file__).resolve().parents[1]
     data_dir = Path(data_dir) if data_dir is not None else root / "data"
     uploads_dir = (
         Path(uploads_dir) if uploads_dir is not None else root / "data" / "uploads"
     )
-    turns = load_corpus(data_dir)
+    turns = load_demo_corpus(data_dir)
     if uploads_dir.is_dir():
         turns.extend(load_corpus(uploads_dir))
     return turns

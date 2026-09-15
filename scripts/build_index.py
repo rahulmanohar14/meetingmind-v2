@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from engine.corpus import load_corpus
+from engine.corpus import load_demo_corpus
 from engine.retrieval import build_index
 
 EMBED_MODEL = "BAAI/bge-small-en-v1.5"
@@ -17,7 +17,7 @@ PERSIST_DIR = ROOT / "data" / "chroma_db"
 
 
 def main() -> None:
-    turns = load_corpus(ROOT / "data")
+    turns = load_demo_corpus(ROOT / "data")
     if not turns:
         raise RuntimeError(f"No transcripts found in {ROOT / 'data'}")
     index = build_index(turns, EMBED_MODEL, PERSIST_DIR)

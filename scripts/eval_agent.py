@@ -24,7 +24,7 @@ if str(ROOT) not in sys.path:
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 from engine.agent import CANDIDATE_K, TOP_N
-from engine.corpus import load_corpus
+from engine.corpus import load_demo_corpus
 from engine.llm import get_call_count
 from engine.retrieval import (
     RELEVANCE_FLOOR,
@@ -150,7 +150,7 @@ def _load_questions(path: Path) -> list[dict]:
 def main() -> None:
     started = time.perf_counter()
 
-    turns = load_corpus(ROOT / "data")
+    turns = load_demo_corpus(ROOT / "data")
     if not turns:
         raise RuntimeError(f"No transcripts found in {ROOT / 'data'}")
 

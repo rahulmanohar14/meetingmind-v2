@@ -1,14 +1,42 @@
-1. Alice: I finally got my bike back from the shop, thanks for asking, and we need to sort that migration today.
-2. Priya: ATL-88 is still open, who's blocked on that?
-3. Bob: honestly, the proration work blew up the numbers.
-4. Alice: The estimate we had on March 27 was X, now it’s basically double after we understood tax handling.
-5. Elena: I can't commit a number today on the funding for the hire.
-6. Priya: That's two sprints, not one, and I need an owner for the migration.
-7. Bob: hang on— the backend load we saw on Tuesday at 5k rps is already hitting our limits.
-8. Priya: So the migration is still at risk, right?
-9. Bob: —if we toggle the feature flag we could defer the tax calc to post‑launch.
-10. Alice: let's park that flag discussion, we need a concrete plan for the migration.
-11. Priya: I’m opening a req for a second backend engineer right now.
-12. Bob: I'm not blocked, the data team is waiting on the tax schema.
-13. Elena: The finance queue is still reconciling the Q1 numbers, so I don’t have a budget line to confirm.
-14. Alice: I don’t want to guess today on whether
+1. Alice: Good morning, everyone—quick personal note, my kid's first day at school, so I’m a bit behind on emails.
+2. Priya: Yeah, same here, just checking ORI‑412, any update on that?
+3. Bob: Honestly—hang on—about the same, still stuck on the flag rollout for the new endpoint.
+4. Alice: Let’s park that and get to the migration; the estimate we had on March 27 is now double because we finally parsed the tax logic.
+5. Elena: I can’t commit a number today, we’re still reconciling the Q2 budget queue.
+6. Priya: Who’s blocked on that tax piece? We need a concrete owner.
+7. Bob: Two more sprints, realistically, for the tax module, if we toggle the flag early.
+8. Alice: So we’re adding two sprints—who’s taking the lead on the flag work?
+9. Priya: I’ll own the flag, but I need a backend to pair; opening a req for a second engineer now.
+10. Bob: That’s the hire you mentioned on Thursday, right?
+11. Elena: The headcount request is still in the approval pipeline, no green light yet.
+12. Alice: I don’t want to guess today, but we need a deadline—can we target the end of May for the migration?
+13. Priya: That’s two sprints from now, not one, so end of May is tight.
+14. Bob: Wait, what?—if we push the flag to production next week, we can shave a sprint.
+15. Alice: Let’s circle back on the flag timing after I hear from finance on the req.
+16. Elena: Still nothing on the funding, the finance queue won’t clear until the next review on Tuesday.
+17. Priya: Who else is blocked by the migration? Any other tickets?
+18. Bob: The load test suite—ticket ATL‑88—still failing on the new billing schema.
+19. Alice: Okay, that’s the same thing we talked about last Friday, we need a fix before the flag merge.
+20. Priya: I’ll assign someone to ATL‑88 after the hire lands.
+21. Bob: Hang on, I think the flag code landed Tuesday, but the CI is still red.
+22. Alice: So we have a red CI and an open flag—who’s owning the CI fix?
+23. Priya: I can triage it, but I need that extra backend.
+24. Elena: I’m still waiting on the budget approval for that extra headcount, can’t say yes or no.
+25. Bob: The same flag we used for Orion could be repurposed, but we’d need a feature toggle on the billing service.
+26. Alice: Let’s not guess, but if we get that toggle by next Thursday we can keep the migration on track.
+27. Priya: Two weeks to get the toggle, that’s optimistic.
+28. Bob: Actually—, the toggle framework was updated last sprint, so maybe we’re further ahead.
+29. Alice: All right, so we’re assuming the toggle is ready by Thursday, the extra backend by end of May, and the tax work takes two sprints.
+30. Elena: I can’t promise the budget will clear by then, but I’ll push it up the queue.
+31. Priya: If the budget stalls, we’ll have to scope down—maybe drop the tax proration for the first release.
+32. Bob: That would be a feature flag off‑switch, we could roll that out as a fallback.
+33. Alice: So we’re doing the fallback flag, the extra hire pending, and the tax work delayed—does that capture it?
+34. Priya: Yeah.
+35. Elena: Still no number on the funding, but I’ll flag it for the CFO.
+36. Bob: I’ll keep the flag code hot, merge it by Wednesday if the CI clears.
+37. Alice: Good. Anything else on the migration?
+38. Priya: No, just that the req is open, but no decision on it yet.
+39. Bob: The load test for ATL‑88—still flaky, I’ll keep watching.
+40. Elena: Same as last week, the finance queue is jammed.
+41. Alice: Then we’ll reconvene next Thursday, same time, and see where we stand.
+42. Priya: Sounds fine.

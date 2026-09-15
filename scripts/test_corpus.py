@@ -10,9 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from engine.corpus import load_corpus, turn_id
+from engine.corpus import load_demo_corpus, turn_id
 
-turns = load_corpus(ROOT / "data")
+turns = load_demo_corpus(ROOT / "data")
 print(f"total turns: {len(turns)}")
 
 by_meeting = Counter(t.meeting_id for t in turns)

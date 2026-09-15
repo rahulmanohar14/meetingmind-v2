@@ -81,17 +81,27 @@ def delete_upload_meetings() -> None:
 
 
 def seed_demo_meetings(demo_dir: Path) -> None:
-    """Register demo transcript files present on disk."""
+    """Register demo transcript files present on disk.
+
+    Covers both the hand-written transcripts directly in data/ and the
+    generated corpus in data/meetings/.
+    """
     init_db()
     from engine.corpus import load_transcript
 
-    for path in sorted(demo_dir.iterdir()):
-        if not path.is_file() or path.suffix.lower() not in {".txt", ".vtt"}:
-            continue
-        turns = load_transcript(path)
-        upsert_meeting(
-            meeting_id=path.stem,
-            path=str(path),
-            turn_count=len(turns),
-            source="demo",
-        )
+    directories = [demo_dir]
+    meetings_dir = demo_dir / "meetings"
+    if meetings_dir.is_dir():
+        directories.append(meetings_dir)
+
+    for directory in directories:
+        for path in sorted(directory.iterdir()):
+            if not path.is_file() or path.suffix.lower() not in {".txt", ".vtt"}:
+                continue
+            turns = load_transcript(path)
+            upsert_meeting(
+                meeting_id=path.stem,
+                path=str(path),
+                turn_count=len(turns),
+                source="demo",
+            )

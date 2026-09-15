@@ -26,15 +26,28 @@ BGE_QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
 
 _WORD = re.compile(r"\w+", re.UNICODE)
 
-# Cross-encoder relevance floor, calibrated against eval/paraphrases.json and
-# eval/off_topic.json (see scripts/eval_agent.py). Natural in-corpus phrasings
-# bottom out near -5.0 at top-1; off-topic questions peak near -9.7. -7.0 sits
-# between them with roughly 2 points of margin on each side.
+# Cross-encoder relevance floor. Recalibrated on the 680-turn corpus by
+# scripts/calibrate_floor.py; rerun that script whenever the corpus changes,
+# because this value is a property of the corpus, not of the model.
 #
-# Golden-set questions score 2.0..10.1, far higher than real user phrasings,
-# so calibrating on the golden set alone produced a floor that rejected valid
-# questions.
-RELEVANCE_FLOOR = -7.0
+# Measured top-1 score populations:
+#   golden set   n=28  -5.50 .. 9.92  (mean  3.56)
+#   paraphrases  n=8   -5.00 .. 6.14  (mean  0.34)
+#   off-topic    n=7  -11.26 .. -3.03 (mean -8.88)
+#
+# Golden-set questions are generated from the transcripts and score far higher
+# than real phrasings, so they cannot set the lower bound alone; the
+# paraphrases are what catch a floor set too high.
+#
+# These populations OVERLAP, unlike on the old 85-turn corpus: the weakest real
+# question (-5.50) scores below the strongest off-topic one (-3.03), so no
+# value separates them cleanly and the choice is an explicit trade. -6.0
+# minimises total errors at 1/43 — it wrongly abstains on nothing, and wrongly
+# answers one off-topic question ("how many story points did we burn down last
+# sprint?"), which this corpus arguably does discuss, since sprints are talked
+# about constantly. A wrong abstention is a visibly broken product; a wrong
+# answer is at least cited and checkable.
+RELEVANCE_FLOOR = -6.0
 
 
 @dataclass

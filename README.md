@@ -1,5 +1,8 @@
 # MeetingMind v2
 
+> Note: this branch (`rag-only`) is mid-refactor. The architecture section below
+> still describes the graph version and is stale. Stage 8 rewrites it.
+
 MeetingMind answers questions over meeting transcripts using two stores: a hybrid
 vector index for factual lookup, and a typed knowledge graph for multi-hop
 relationship questions (blockers, dependencies, ownership chains). A LangGraph
